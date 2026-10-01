@@ -82,7 +82,7 @@ struct SettingsView: View {
             }
 
             Section("HOW TO PLAY") {
-                Text("Feed MEAT for hunger hearts, PROTEIN for strength. TRAIN by tapping fast or just walking. FLUSH poop, give MEDICINE when you see a skull. The ! light means your dino needs you. Bedtime is 8-10pm: light off = asleep (needs pause), light on = awake and ready to play any time. Leaving the game at night turns the light off for you. Good care + lots of training + winning battles = the best dinosaurs. Taking the watch off? Hold the screen for 1 second to pause (daycare). Charging pauses automatically.")
+                Text("Feed MEAT for hunger hearts, PROTEIN for strength. TRAIN by tapping fast or just walking. FLUSH poop, give MEDICINE when you see a skull. The ! light means your dino needs you. Bedtime is 8-10pm: light off = asleep (needs pause), light on = awake and ready to play any time. Leaving the game at night turns the light off for you. Good care + lots of training + winning battles = the best dinosaurs. Every new egg rolls the dice: a striped RARE egg (10%) becomes a random Ultimate, and the SPIKY egg (2%) is the only way to get a T-Rex or Raptor. Taking the watch off? Hold the screen for 1 second to pause (daycare). Charging pauses automatically.")
                     .font(.system(size: 12))
             }
 
@@ -93,11 +93,19 @@ struct SettingsView: View {
                 Button("Add 250 steps") { state.creditSteps(250) }
                 Button("Evolve now") { state.debugEvolve() }
                 Button("Make sick") { state.debugSick() }
+                Button("Lay rare egg") { state.debugEgg(.rare) }
+                Button("Lay spiky egg") { state.debugEgg(.spiky) }
             }
             #endif
 
             Section {
-                Button("Start new egg", role: .destructive) { confirmReset = true }
+                if state.newEggUnlocksAt == nil {
+                    Button("Start new egg", role: .destructive) { confirmReset = true }
+                } else {
+                    LabeledContent("New egg in", value: "\(state.newEggDaysLeft) days")
+                }
+            } footer: {
+                Text("You can start a new egg once every 2 weeks, or right away if your dino dies.")
             }
         }
         .confirmationDialog("Start over with a new egg?", isPresented: $confirmReset) {

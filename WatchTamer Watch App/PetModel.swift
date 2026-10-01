@@ -38,15 +38,34 @@ enum DinoStage: String, Codable, CaseIterable {
     }
 }
 
-// MARK: - The dinosaur roster (12 popular dinosaurs)
+// MARK: - The dinosaur roster
+
+/// What kind of egg a new dino came from. Every new egg rolls the dice.
+enum EggKind: String, Codable {
+    case normal   // 88%: care, training and battles decide
+    case rare     // 10%: striped egg, becomes a random Ultimate (no battles needed)
+    case spiky    //  2%: spiky egg, Dino Kid -> T-Rex or Ultimate Raptor
+
+    /// 2% spiky, 10% rare, otherwise normal. `roll` is 0..<1.
+    static func roll(_ roll: Double = Double.random(in: 0..<1)) -> EggKind {
+        if roll < Tuning.spikyEggChance { return .spiky }
+        if roll < Tuning.spikyEggChance + Tuning.rareEggChance { return .rare }
+        return .normal
+    }
+}
 
 enum DinoSpecies: String, Codable, CaseIterable {
-    // Rookie
+    // NOTE: battle codes store the index of each case, so new cases go at the END.
+    // Rookie (velociraptor = the old rookie, kept so older saves still load)
     case velociraptor, compsognathus
     // Champion
     case triceratops, stegosaurus, pteranodon, parasaurolophus, dilophosaurus
-    // Ultimate
+    // Ultimate (T-Rex now only hatches from the spiky egg)
     case tRex = "t_rex", spinosaurus, brachiosaurus, ankylosaurus, pachycephalosaurus
+    // Added later
+    case oviraptor                     // Rookie
+    case styracosaurus                 // Ultimate (from Triceratops)
+    case megaRaptor = "mega_raptor"    // Ultimate Raptor, spiky egg only
 
     var displayName: String {
         switch self {
@@ -62,20 +81,34 @@ enum DinoSpecies: String, Codable, CaseIterable {
         case .brachiosaurus: return "BRACHIO"
         case .ankylosaurus: return "ANKYLOSAUR"
         case .pachycephalosaurus: return "PACHY"
+        case .oviraptor: return "OVIRAPTOR"
+        case .styracosaurus: return "STYRACO"
+        case .megaRaptor: return "RAPTOR"
         }
     }
 
     var stage: DinoStage {
         switch self {
-        case .velociraptor, .compsognathus: return .rookie
+        case .velociraptor, .compsognathus, .oviraptor: return .rookie
         case .triceratops, .stegosaurus, .pteranodon, .parasaurolophus, .dilophosaurus: return .champion
         default: return .ultimate
         }
     }
 
+    /// T-Rex and Ultimate Raptor: only from the spiky egg, the best of the best.
+    var isLegendary: Bool { self == .tRex || self == .megaRaptor }
+
+    /// Extra battle bonus for legendary dinos: they hit harder and defend better.
+    var attackBonus: Double { isLegendary ? Tuning.legendaryBonus : 0 }
+    var defenseBonus: Double { isLegendary ? Tuning.legendaryBonus : 0 }
+
+    /// Dinos you can meet as CPU rivals (normal play only).
     static func roster(for stage: DinoStage) -> [DinoSpecies] {
-        allCases.filter { $0.stage == stage }
+        allCases.filter { $0.stage == stage && !$0.isLegendary && $0 != .velociraptor }
     }
+
+    /// The Ultimates a rare egg can turn into (25% each).
+    static let rareUltimates: [DinoSpecies] = [.styracosaurus, .spinosaurus, .ankylosaurus, .brachiosaurus]
 }
 
 // MARK: - Tuning (all times are GAME minutes; game speed multiplies real time)
@@ -155,6 +188,11 @@ enum Tuning {
     static let ultimateBattles = 15
     static let ultimateWinRate = 0.8
     static let sukamonMistakes = 6
+    static let rareEggChance = 0.10
+    static let spikyEggChance = 0.02
+    static let legendaryBonus: Double = 15     // T-Rex / Ultimate Raptor attack and defense
+    /// "Start new egg" can be used once per this many days (unless your dino died).
+    static let newEggCooldownDays: Double = 14
     /// Safety net: if a deadly problem builds up while the app is closed, the dino
     /// survives and you get at least this many game minutes after you come back.
     static let comebackGrace: Double = 60
@@ -201,7 +239,11 @@ struct CallTimer: Codable, Equatable {
 struct Pet: Codable, Equatable {
     var generation = 1
     var stage: DinoStage = .egg
-    var species: DinoSpecies = .velociraptor
+    var species: DinoSpecies = .oviraptor
+    /// Optional so older saves still load (missing = normal egg).
+    var eggKindSaved: EggKind? = nil
+    /// The Ultimate waiting inside a rare or spiky egg, picked when the egg is laid.
+    var prize: DinoSpecies? = nil
     var ageMinutes: Double = 0
     var stageMinutes: Double = 0
     var eggProgress: Double = 0
@@ -245,10 +287,30 @@ struct Pet: Codable, Equatable {
     var totalWinRate: Double { totalBattles == 0 ? 0 : Double(totalWins) / Double(totalBattles) }
     var ageDays: Int { Int(ageMinutes / (24 * 60)) }
     var isCalling: Bool { hungerCall.isCalling || strengthCall.isCalling }
+    var eggKind: EggKind { eggKindSaved ?? .normal }
+
+    /// A brand-new egg of the given kind. Rare and spiky eggs pick their prize now.
+    static func newEgg(generation: Int, kind: EggKind) -> Pet {
+        var p = Pet()
+        p.generation = generation
+        p.eggKindSaved = kind
+        switch kind {
+        case .normal: p.prize = nil
+        case .rare: p.prize = DinoSpecies.rareUltimates.randomElement()
+        case .spiky: p.prize = Bool.random() ? .tRex : .megaRaptor
+        }
+        p.lastUpdate = Date()
+        return p
+    }
 
     var formName: String {
         switch stage {
-        case .egg: return "EGG"
+        case .egg:
+            switch eggKind {
+            case .normal: return "EGG"
+            case .rare: return "RARE EGG"
+            case .spiky: return "SPIKY EGG"
+            }
         case .baby1: return "HATCHLING"
         case .baby2: return "DINO KID"
         default: return species.displayName
@@ -258,7 +320,12 @@ struct Pet: Codable, Equatable {
     /// Key into PixelArt.creatures
     var spriteKey: String {
         switch stage {
-        case .egg: return "egg"
+        case .egg:
+            switch eggKind {
+            case .normal: return "egg"
+            case .rare: return "egg_rare"
+            case .spiky: return "egg_spiky"
+            }
         case .baby1: return "baby1"
         case .baby2: return "baby2"
         default: return species.rawValue
@@ -396,7 +463,7 @@ struct Pet: Codable, Equatable {
 
     mutating func hatch() {
         stage = .baby1
-        species = .velociraptor
+        species = .oviraptor
         stageMinutes = 0
         eggProgress = 100
         weight = Tuning.baseWeight(.baby1)
@@ -437,14 +504,22 @@ struct Pet: Codable, Equatable {
             hatch()
             return true
         case .baby1:
-            setForm(.baby2, .velociraptor)
+            setForm(.baby2, .oviraptor)
         case .baby2:
-            setForm(.rookie, careMistakes <= 3 ? .velociraptor : .compsognathus)
+            if eggKind == .spiky {
+                // The rarest egg: straight to T-Rex or Ultimate Raptor. Never a Pachy.
+                setForm(.ultimate, prize ?? .tRex)
+            } else {
+                setForm(.rookie, careMistakes <= 3 ? .oviraptor : .compsognathus)
+            }
         case .rookie:
             setForm(.champion, championForm())
         case .champion:
             if careMistakes >= Tuning.sukamonMistakes {
-                setForm(.ultimate, .pachycephalosaurus)
+                setForm(.ultimate, .pachycephalosaurus)   // neglected (normal or rare egg)
+            } else if eggKind == .rare {
+                // Rare egg + good care: its random Ultimate, no battles needed.
+                setForm(.ultimate, prize ?? DinoSpecies.rareUltimates[0])
             } else if battles >= Tuning.ultimateBattles && winRate >= Tuning.ultimateWinRate {
                 setForm(.ultimate, ultimateForm())
             } else {
@@ -458,7 +533,7 @@ struct Pet: Codable, Equatable {
 
     func championForm() -> DinoSpecies {
         let trainedHard = trainings >= Tuning.bigTrainingGoal
-        if species == .velociraptor {
+        if species == .oviraptor || species == .velociraptor {
             if careMistakes <= 3 { return trainedHard ? .triceratops : .pteranodon }
             return trainedHard ? .stegosaurus : .parasaurolophus
         }
@@ -470,11 +545,11 @@ struct Pet: Codable, Equatable {
 
     func ultimateForm() -> DinoSpecies {
         switch species {
-        case .triceratops: return .tRex
+        case .triceratops: return .styracosaurus
         case .pteranodon, .dilophosaurus: return .spinosaurus
         case .stegosaurus: return .ankylosaurus
         case .parasaurolophus: return .brachiosaurus
-        default: return .tRex
+        default: return .styracosaurus
         }
     }
 

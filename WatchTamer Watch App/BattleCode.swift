@@ -36,7 +36,7 @@ struct BattleCode: Equatable {
     /// 24 data bits + 6 check bits = 30 bits = 6 characters.
     private var payload: UInt32 {
         let index = UInt32(DinoSpecies.allCases.firstIndex(of: species) ?? 0)
-        var p: UInt32 = index                 // 4 bits
+        var p: UInt32 = index                 // 4 bits (room for 16 species)
         p = (p << 3) | UInt32(strength)       // 3 bits
         p = (p << 3) | UInt32(effort)         // 3 bits
         p = (p << 5) | UInt32(trainings)      // 5 bits
@@ -108,8 +108,11 @@ struct BattleCode: Equatable {
         let second = iAmFirst ? theirs : mine
         var rng = SplitMix64(seed: (UInt64(first.value) << 32) | UInt64(second.value))
 
-        let firstHit = hitChance(attacker: first.power, defender: second.power)
-        let secondHit = hitChance(attacker: second.power, defender: first.power)
+        // Legendary dinos (spiky egg) hit harder and defend better.
+        let firstHit = hitChance(attacker: first.power + first.species.attackBonus,
+                                 defender: second.power + second.species.defenseBonus)
+        let secondHit = hitChance(attacker: second.power + second.species.attackBonus,
+                                  defender: first.power + first.species.defenseBonus)
         var firstLives = 3
         var secondLives = 3
         var shots: [Shot] = []

@@ -101,6 +101,10 @@ struct Tamer: Codable, Equatable {
 
     var myBattleCode: String? = nil  // snapshot shown to friends; renewed after each battle
 
+    /// When the current egg was started. "Start new egg" unlocks again
+    /// `Tuning.newEggCooldownDays` later (or right away if the dino dies).
+    var lastNewEgg: Date? = nil
+
     var pausedReason: PauseReason? = nil
     var pauseWhenChargingSetting: Bool? = nil
     var pauseWhenCharging: Bool {
@@ -150,8 +154,14 @@ final class DinoState: ObservableObject {
     private let tamerKey = "watch_tamer_v3_tamer"
 
     init() {
-        pet = DinoState.load(Pet.self, key: "watch_tamer_v3_pet") ?? Pet()
         tamer = DinoState.load(Tamer.self, key: "watch_tamer_v3_tamer") ?? Tamer()
+        if let saved = DinoState.load(Pet.self, key: "watch_tamer_v3_pet") {
+            pet = saved
+        } else {
+            // Very first egg also rolls the dice.
+            pet = Pet.newEgg(generation: 1, kind: EggKind.roll())
+            tamer.lastNewEgg = Date()
+        }
         catchUp()
         WKInterfaceDevice.current().isBatteryMonitoringEnabled = true
         ticker = Timer.publish(every: 1, on: .main, in: .common)
@@ -715,8 +725,11 @@ final class DinoState: ObservableObject {
         haptic(.start)
         let mine = playerPower()
         let theirs = Tuning.battlePower(rival.stage) + Double.random(in: 10...38)
-        let myHit = min(0.85, max(0.25, 0.5 + (mine - theirs) / 100))
-        let theirHit = min(0.8, max(0.2, 0.5 + (theirs - mine) / 100))
+        // Legendary dinos (spiky egg) hit harder and defend better.
+        let myAttack = mine + pet.species.attackBonus - rival.defenseBonus
+        let theirAttack = theirs + rival.attackBonus - pet.species.defenseBonus
+        let myHit = min(0.85, max(0.25, 0.5 + (myAttack - theirs) / 100))
+        let theirHit = min(0.8, max(0.2, 0.5 + (theirAttack - mine) / 100))
 
         if let plan {
             for shot in plan where playerLives > 0 && enemyLives > 0 {
@@ -784,15 +797,40 @@ final class DinoState: ObservableObject {
 
     // MARK: - New egg
 
+    /// When "Start new egg" unlocks again, or nil if it can be used now.
+    /// A dino that died can always be replaced right away.
+    var newEggUnlocksAt: Date? {
+        guard !pet.isDead, let last = tamer.lastNewEgg else { return nil }
+        let unlock = last.addingTimeInterval(Tuning.newEggCooldownDays * 24 * 3600)
+        return unlock > Date() ? unlock : nil
+    }
+
+    /// Whole days left until "Start new egg" unlocks (at least 1 while locked).
+    var newEggDaysLeft: Int {
+        guard let unlock = newEggUnlocksAt else { return 0 }
+        return max(1, Int(ceil(unlock.timeIntervalSinceNow / (24 * 3600))))
+    }
+
+    /// Every new egg rolls the dice: 88% normal, 10% rare, 2% spiky.
     func newEgg() {
-        let gen = pet.generation + 1
-        var p = Pet()
-        p.generation = gen
-        p.lastUpdate = Date()
-        pet = p
+        guard newEggUnlocksAt == nil else {
+            showToast("NEW EGG IN \(newEggDaysLeft)d")
+            haptic(.failure)
+            return
+        }
+        layEgg(EggKind.roll())
+    }
+
+    private func layEgg(_ kind: EggKind) {
+        pet = Pet.newEgg(generation: pet.generation + 1, kind: kind)
+        tamer.lastNewEgg = Date()
         screen = .home
         anim = .none
-        haptic(.retry)
+        switch kind {
+        case .normal: haptic(.retry)
+        case .rare: showToast("RARE EGG!"); haptic(.success)
+        case .spiky: showToast("SPIKY EGG!!"); haptic(.success)
+        }
         save()
     }
 
@@ -831,6 +869,10 @@ final class DinoState: ObservableObject {
             showToast("FINAL FORM")
         }
         save()
+    }
+
+    func debugEgg(_ kind: EggKind) {
+        layEgg(kind)
     }
 
     func debugSick() {

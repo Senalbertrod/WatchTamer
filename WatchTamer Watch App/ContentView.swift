@@ -205,6 +205,13 @@ struct ContentView: View {
         }
     }
 
+    /// Shrinks a sprite's dot size (never grows it) so it fits in `cols` x `maxRows` LCD dots.
+    private func fitDot(_ rows: [String], dot: CGFloat, cols: CGFloat, rows maxRows: CGFloat) -> CGFloat {
+        let w = CGFloat(rows.map { $0.count }.max() ?? 1)
+        let h = CGFloat(max(rows.count, 1))
+        return dot * min(1, cols / max(w, 1), maxRows / h)
+    }
+
     private func lcdText(_ text: String, _ size: CGFloat = 10) -> some View {
         Text(text)
             .font(.system(size: size, weight: .bold, design: .monospaced))
@@ -222,7 +229,8 @@ struct ContentView: View {
             LCDGrid(dot: dot, color: pal.ghost)
             VStack(spacing: 3) {
                 HStack(spacing: 4) {
-                    PixelSprite(rows: DinoSprite.rows(pet.spriteKey, frame: 0), dot: max(1.5, dot * 0.6), color: pal.dot)
+                    let pausedRows = DinoSprite.rows(pet.spriteKey, frame: 0)
+                    PixelSprite(rows: pausedRows, dot: fitDot(pausedRows, dot: dot, cols: 18, rows: 8), color: pal.dot)
                     PixelSprite(rows: PixelArt.zzz, dot: max(1.5, dot * 0.6), color: pal.dot)
                 }
                 lcdText(charging ? "CHARGING" : "DAYCARE", 12)
@@ -242,7 +250,8 @@ struct ContentView: View {
         let spriteW = CGFloat(rows.first?.count ?? 0) * dot
         let spriteH = CGFloat(rows.count) * dot
         let poopAreaDots: CGFloat = pet.poops > 0 ? 13 : 0
-        let usableW = size.width - poopAreaDots * dot
+        // Big dinos may stand partly in front of the poop rather than off the screen.
+        let usableW = max(min(size.width, spriteW + 2 * dot), size.width - poopAreaDots * dot)
         let maxShift = max(0, (usableW - spriteW) / 2 - dot)
         let shift = min(maxShift, max(-maxShift, CGFloat(walkX) * dot))
         let isFlyer = pet.stage != .egg && pet.species == .pteranodon && pet.stage == .champion
@@ -318,10 +327,11 @@ struct ContentView: View {
     }
 
     private func eggScene(dot: CGFloat, size: CGSize, rows: [String], groundY: CGFloat) -> some View {
-        let spriteH = CGFloat(rows.count) * dot
+        let eggDot = fitDot(rows, dot: dot, cols: 30, rows: 15)   // leave room for the text
+        let spriteH = CGFloat(rows.count) * eggDot
         let tapsLeft = max(0, Int(ceil((100 - pet.eggProgress) / 10)))
         return ZStack {
-            PixelSprite(rows: rows, dot: dot, color: pal.dot)
+            PixelSprite(rows: rows, dot: eggDot, color: pal.dot)
                 .position(x: size.width / 2, y: groundY - spriteH / 2)
             VStack(spacing: 1) {
                 lcdText("TAP OR WALK", 9)
@@ -528,8 +538,9 @@ struct ContentView: View {
     private func tapTrainingScene(dot: CGFloat, size: CGSize) -> some View {
         let groundY = size.height - 2 * dot
         let rows = DinoSprite.rows(pet.spriteKey, frame: state.trainOver ? 0 : frame)
-        let spriteW = CGFloat(rows.first?.count ?? 0) * dot
-        let spriteH = CGFloat(rows.count) * dot
+        let tdot = fitDot(rows, dot: dot, cols: 22, rows: 14)
+        let spriteW = CGFloat(rows.first?.count ?? 0) * tdot
+        let spriteH = CGFloat(rows.count) * tdot
         let wallX = size.width - 4 * dot
         let dinoX = 2 * dot + spriteW / 2
 
@@ -545,7 +556,7 @@ struct ContentView: View {
             .padding(.horizontal, 5)
             .position(x: size.width / 2, y: 6 * dot)
 
-            PixelSprite(rows: rows, dot: dot, color: pal.dot, flipped: true)
+            PixelSprite(rows: rows, dot: tdot, color: pal.dot, flipped: true)
                 .position(x: dinoX, y: groundY - spriteH / 2)
 
             PixelSprite(rows: PixelArt.wall, dot: dot, color: pal.dot)
@@ -598,12 +609,14 @@ struct ContentView: View {
         let groundY = size.height - 2 * dot
         let myRows = DinoSprite.rows(pet.spriteKey, frame: frame)
         let foeRows = DinoSprite.rows(state.enemySpecies.rawValue, frame: frame)
-        let myW = CGFloat(myRows.first?.count ?? 0) * bdot
-        let foeW = CGFloat(foeRows.first?.count ?? 0) * bdot
+        let myDot = fitDot(myRows, dot: dot, cols: 16, rows: 13)
+        let foeDot = fitDot(foeRows, dot: dot, cols: 16, rows: 13)
+        let myW = CGFloat(myRows.first?.count ?? 0) * myDot
+        let foeW = CGFloat(foeRows.first?.count ?? 0) * foeDot
         let myX = myW / 2 + 2 * dot + (state.playerShake ? -2 * bdot : 0)
         let foeX = size.width - foeW / 2 - 2 * dot + (state.enemyShake ? 2 * bdot : 0)
-        let myY = groundY - CGFloat(myRows.count) * bdot / 2
-        let foeY = groundY - CGFloat(foeRows.count) * bdot / 2
+        let myY = groundY - CGFloat(myRows.count) * myDot / 2
+        let foeY = groundY - CGFloat(foeRows.count) * foeDot / 2
         let small = max(1.5, bdot * 0.6)
 
         return ZStack {
@@ -629,11 +642,11 @@ struct ContentView: View {
                 .padding(.horizontal, 4)
                 .position(x: size.width / 2, y: 4 * dot)
 
-                PixelSprite(rows: myRows, dot: bdot, color: pal.dot, flipped: true)
+                PixelSprite(rows: myRows, dot: myDot, color: pal.dot, flipped: true)
                     .position(x: myX, y: myY)
                     .opacity(state.battlePhase == .result(false) && frame == 1 ? 0.25 : 1)
 
-                PixelSprite(rows: foeRows, dot: bdot, color: pal.dot)
+                PixelSprite(rows: foeRows, dot: foeDot, color: pal.dot)
                     .position(x: foeX, y: foeY)
                     .opacity(state.battlePhase == .result(true) && frame == 1 ? 0.25 : 1)
 

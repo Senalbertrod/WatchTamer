@@ -2,7 +2,7 @@
 
 A classic 90s-style virtual pet for Apple Watch, the kind you raised on a keychain and then plugged into a friend's to battle. It uses a dot-matrix LCD, icon menus and care mistakes, with dinosaurs in place of monsters.
 
-![The 12 WatchTamer dinosaurs](docs/dinosaurs.png)
+![The WatchTamer dinosaurs](docs/dinosaurs.png)
 
 ## Requirements
 
@@ -17,7 +17,7 @@ A classic 90s-style virtual pet for Apple Watch, the kind you raised on a keycha
 3. Pick your Apple Watch (or a watch simulator) at the top of the window and press **▶ Run**.
 4. On first launch, allow **Motion & Fitness** (for walk training) and **Notifications** (for care reminders).
 
-Builds run from Xcode include a **Testing** section in Settings (skip time, add steps, evolve now, make sick). App Store and TestFlight builds leave it out automatically.
+Builds run from Xcode include a **Testing** section in Settings (skip time, add steps, evolve now, make sick, lay a rare or spiky egg). App Store and TestFlight builds leave it out automatically.
 
 ## How to play
 
@@ -49,21 +49,37 @@ Swipe left for **Settings**: pause (daycare), pause while charging, Classic (rea
 
 Codes refresh after every battle, so swap new ones for a rematch. Use **NEW CODE** on the entry screen to make a fresh one. Mistyped codes are rejected before the battle starts.
 
-## Evolution chart
+## Eggs and evolution
+
+![How to get every dinosaur](docs/evolution.png)
+
+**Every new egg rolls the dice:**
+
+| Egg | Chance | What's inside |
+| --- | --- | --- |
+| Normal (spotted) | 88% | Care, training and battles decide (chart above) |
+| Rare (striped, with sparkles) | 10% | Grows like a normal egg, then becomes a random Ultimate (Styracosaurus, Spinosaurus, Ankylosaur or Brachio, 25% each) with no battles needed. Neglect it as a Champion (6+ care mistakes) and it becomes a Pachy |
+| Spiky | 2% | The rarest. Goes straight from Dino Kid to **T-Rex** or **Raptor** (50/50) |
+
+**T-Rex and Raptor only come from the spiky egg.** They're the best of the best: +15 attack and +15 defense in every battle (CPU and friend), so they beat other Ultimates about 2 times out of 3. They never become a Pachy, but they can still lose and can still die if neglected.
+
+**Normal egg path:**
 
 ```
-Egg → Hatchling → Dino Kid ─┬─ (≤3 mistakes) Raptor ─┬─ good care + 16 trainings → Triceratops ─→ T-REX
-                            │                         ├─ good care, less training → Pteranodon ──→ SPINOSAURUS
-                            │                         ├─ sloppy care + training ──→ Stegosaurus ─→ ANKYLOSAURUS
-                            │                         └─ sloppy care, no training → Parasaur ────→ BRACHIOSAURUS
-                            └─ (4+ mistakes) Compy ───┬─ 16 trainings, ≤5 mistakes → Dilophosaurus → SPINOSAURUS
-                                                      ├─ 8+ trainings ────────────→ Stegosaurus
-                                                      └─ otherwise ───────────────→ Parasaur
+Egg → Hatchling → Dino Kid ─┬─ (≤3 mistakes) Oviraptor ─┬─ good care + 16 trainings → Triceratops ─→ STYRACOSAURUS
+                            │                            ├─ good care, less training → Pteranodon ──→ SPINOSAURUS
+                            │                            ├─ sloppy care + training ──→ Stegosaurus ─→ ANKYLOSAUR
+                            │                            └─ sloppy care, no training → Parasaur ────→ BRACHIO
+                            └─ (4+ mistakes) Compy ──────┬─ 16 trainings, ≤5 mistakes → Dilophosaurus → SPINOSAURUS
+                                                         ├─ 8+ trainings ────────────→ Stegosaurus
+                                                         └─ otherwise ───────────────→ Parasaur
 Champion → Ultimate needs 15+ battles with an 80%+ win rate at that stage.
-6+ care mistakes as a Champion → Pachycephalosaurus.
+6+ care mistakes as a Champion → Pachy.
 ```
 
-How long each stage lasts at Classic speed: Egg 10 min · Baby I 10 min · Baby II 6 h · Rookie 24 h · Champion 36 h (then it evolves once it meets the battle goal). Fast speed is 10× quicker. Time spent paused (daycare or charging) doesn't count.
+How long each stage lasts at Classic speed: Egg 10 min · Hatchling 10 min · Dino Kid 6 h · Rookie 24 h · Champion 36 h (a normal egg then evolves once it meets the battle goal). Fast speed is 10× quicker. Time spent paused (daycare or charging) doesn't count.
+
+**Fair play:** **Start new egg** (in Settings) can be used once every 2 weeks, so you can't keep restarting to fish for a spiky egg. Keep your dino as long as you like; if it dies, you get a new egg right away.
 
 ## Project layout
 
@@ -74,7 +90,7 @@ How long each stage lasts at Classic speed: Egg 10 min · Baby I 10 min · Baby 
 - `PixelArt.swift`: all dinosaur and icon sprites as dot-matrix art
 - `BattleCode.swift`: friend battle codes and the shared, seeded fight
 - `SettingsView.swift`: settings, help and testing tools
-- `docs/dinosaurs.png`: the roster image above
+- `docs/dinosaurs.png` and `docs/evolution.png`: the pictures in this README
 
 ## Privacy
 
