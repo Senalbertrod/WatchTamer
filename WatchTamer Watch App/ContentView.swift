@@ -11,6 +11,7 @@ import SwiftUI
 import CoreMotion
 import Combine
 import Foundation
+import WatchKit
 
 struct ContentView: View {
     @ObservedObject var state: DinoState
@@ -22,6 +23,8 @@ struct ContentView: View {
     @State private var blink = false
     @State private var flushProgress: CGFloat = 1
     @State private var friendCodeInput = ""
+    @State private var showCodeEntry = false
+    @State private var codeError = false
 
     private let stepTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
@@ -37,6 +40,9 @@ struct ContentView: View {
             }
         }
         .onReceive(stepTimer) { _ in stepAnimation() }
+        // Friend-code entry lives on its own screen, away from the game's
+        // tap gestures, so the watch keyboard / Scribble / dictation can open.
+        .sheet(isPresented: $showCodeEntry) { codeEntrySheet }
         .onChange(of: state.anim) { _, newValue in
             if newValue == .flushing {
                 flushProgress = 1
@@ -167,6 +173,9 @@ struct ContentView: View {
             state.mash()
         case .walk:
             state.goHome()
+        case .friendCode:
+            codeError = false
+            showCodeEntry = true
         default:
             break
         }
@@ -446,20 +455,72 @@ struct ContentView: View {
             Text(state.tamer.myBattleCode ?? "------")
                 .font(.system(size: 18, weight: .heavy, design: .monospaced))
                 .foregroundColor(pal.dot)
-                .onTapGesture { state.newBattleCode() }
-            TextField("FRIEND'S CODE", text: $friendCodeInput)
-                .textInputAutocapitalization(.characters)
-                .autocorrectionDisabled()
-                .font(.system(size: 12, weight: .bold, design: .monospaced))
-                .onSubmit {
-                    let code = friendCodeInput
-                    friendCodeInput = ""
-                    state.startFriendBattle(code: code)
-                }
-            lcdText("TAP CODE = NEW CODE", 7)
-                .opacity(0.7)
+            lcdText("TAP TO ENTER", 10)
+                .opacity(blink ? 1 : 0.4)
+            lcdText("FRIEND'S CODE", 10)
+                .opacity(blink ? 1 : 0.4)
         }
         .padding(4)
+    }
+
+    /// Full-screen code entry. Tapping the text box opens the watch's
+    /// keyboard (or Scribble / dictation on watches without a keyboard).
+    private var codeEntrySheet: some View {
+        ScrollView {
+            VStack(spacing: 8) {
+                Text("FRIEND'S CODE")
+                    .font(.system(size: 13, weight: .heavy, design: .monospaced))
+                    .foregroundColor(.green)
+
+                TextField("H5N-9QP", text: $friendCodeInput)
+                    .textInputAutocapitalization(.characters)
+                    .autocorrectionDisabled()
+                    .font(.system(size: 16, weight: .bold, design: .monospaced))
+                    .onSubmit { submitFriendCode() }
+
+                if codeError {
+                    Text("BAD CODE. CHECK IT AND TRY AGAIN.")
+                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                }
+
+                Button {
+                    submitFriendCode()
+                } label: {
+                    Text("⚡ BATTLE!")
+                        .font(.system(size: 14, weight: .heavy, design: .monospaced))
+                        .frame(maxWidth: .infinity)
+                }
+                .tint(.green)
+                .disabled(friendCodeInput.filter { $0.isLetter || $0.isNumber }.count != 6)
+
+                Divider()
+
+                Text("YOUR CODE")
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .foregroundColor(.secondary)
+                Text(state.tamer.myBattleCode ?? "------")
+                    .font(.system(size: 20, weight: .heavy, design: .monospaced))
+                    .foregroundColor(.green)
+                Button("NEW CODE") { state.newBattleCode() }
+                    .font(.system(size: 12, weight: .bold, design: .monospaced))
+            }
+            .padding(.horizontal, 4)
+        }
+    }
+
+    private func submitFriendCode() {
+        let code = friendCodeInput
+        guard BattleCode.decode(code) != nil else {
+            codeError = true
+            state.haptic(.failure)
+            return
+        }
+        friendCodeInput = ""
+        codeError = false
+        showCodeEntry = false
+        state.startFriendBattle(code: code)
     }
 
     // MARK: - Tap training

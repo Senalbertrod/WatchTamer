@@ -44,10 +44,10 @@ Swipe left for **Settings**: pause (daycare), pause while charging, Classic (rea
 ## Battling a friend (battle codes)
 
 1. Both players tap ⚡ → **FRIEND**. Each watch shows a code like `H5N-9QP`, a snapshot of that dino.
-2. Type your friend's code into your watch while they type yours.
+2. Tap the screen to open code entry, then tap the text box to type your friend's code (keyboard, Scribble or dictation) while they type yours. Tap **⚡ BATTLE!**
 3. Both watches play out the **same fight** with the same winner, with no internet or pairing needed.
 
-Codes refresh after every battle, so swap new ones for a rematch. Tap your code to make a new one. Mistyped codes are rejected.
+Codes refresh after every battle, so swap new ones for a rematch. Use **NEW CODE** on the entry screen to make a fresh one. Mistyped codes are rejected before the battle starts.
 
 ## Evolution chart
 
