@@ -15,22 +15,24 @@ struct BattleCode: Equatable {
     let strength: Int      // 0...4
     let effort: Int        // 0...4
     let trainings: Int     // 0...31
-    let nonce: Int         // 0...511, makes every code unique
+    let rarePrize: Bool    // a rare egg's Ultimate (a little stronger)
+    let nonce: Int         // 0...255, makes every code unique
 
     // No 0/O or 1/I, so codes are easy to read and type.
     private static let alphabet = Array("23456789ABCDEFGHJKLMNPQRSTUVWXYZ")
 
-    init(species: DinoSpecies, strength: Int, effort: Int, trainings: Int, nonce: Int) {
+    init(species: DinoSpecies, strength: Int, effort: Int, trainings: Int, rarePrize: Bool, nonce: Int) {
         self.species = species
         self.strength = min(4, max(0, strength))
         self.effort = min(4, max(0, effort))
         self.trainings = min(31, max(0, trainings))
-        self.nonce = nonce & 511
+        self.rarePrize = rarePrize
+        self.nonce = nonce & 255
     }
 
     init(pet: Pet) {
         self.init(species: pet.species, strength: pet.strength, effort: pet.effort,
-                  trainings: pet.trainings, nonce: Int.random(in: 0...511))
+                  trainings: pet.trainings, rarePrize: pet.isRarePrize, nonce: Int.random(in: 0...255))
     }
 
     /// 24 data bits + 6 check bits = 30 bits = 6 characters.
@@ -40,7 +42,8 @@ struct BattleCode: Equatable {
         p = (p << 3) | UInt32(strength)       // 3 bits
         p = (p << 3) | UInt32(effort)         // 3 bits
         p = (p << 5) | UInt32(trainings)      // 5 bits
-        p = (p << 9) | UInt32(nonce)          // 9 bits
+        p = (p << 1) | (rarePrize ? 1 : 0)    // 1 bit
+        p = (p << 8) | UInt32(nonce)          // 8 bits
         return p
     }
 
@@ -75,7 +78,8 @@ struct BattleCode: Equatable {
         let payload = v >> 6
         guard v & 63 == checksum(payload) else { return nil }
 
-        let nonce = Int(payload & 511)
+        let nonce = Int(payload & 255)
+        let rarePrize = (payload >> 8) & 1 == 1
         let trainings = Int((payload >> 9) & 31)
         let effort = Int((payload >> 14) & 7)
         let strength = Int((payload >> 17) & 7)
@@ -84,8 +88,11 @@ struct BattleCode: Equatable {
         let species = DinoSpecies.allCases[index]
         guard species.stage.order >= DinoStage.rookie.order else { return nil }
         return BattleCode(species: species, strength: strength, effort: effort,
-                          trainings: trainings, nonce: nonce)
+                          trainings: trainings, rarePrize: rarePrize, nonce: nonce)
     }
+
+    /// Extra attack and defense: spiky-egg dinos +15, a rare egg's Ultimate +8.
+    var bonus: Double { Tuning.battleBonus(species: species, rarePrize: rarePrize) }
 
     var power: Double {
         Tuning.battlePower(species.stage)
@@ -108,11 +115,9 @@ struct BattleCode: Equatable {
         let second = iAmFirst ? theirs : mine
         var rng = SplitMix64(seed: (UInt64(first.value) << 32) | UInt64(second.value))
 
-        // Legendary dinos (spiky egg) hit harder and defend better.
-        let firstHit = hitChance(attacker: first.power + first.species.attackBonus,
-                                 defender: second.power + second.species.defenseBonus)
-        let secondHit = hitChance(attacker: second.power + second.species.attackBonus,
-                                  defender: first.power + first.species.defenseBonus)
+        // Spiky-egg dinos (and, a little, rare-egg Ultimates) hit harder and defend better.
+        let firstHit = hitChance(attacker: first.power + first.bonus, defender: second.power + second.bonus)
+        let secondHit = hitChance(attacker: second.power + second.bonus, defender: first.power + first.bonus)
         var firstLives = 3
         var secondLives = 3
         var shots: [Shot] = []

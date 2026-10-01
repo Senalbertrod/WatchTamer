@@ -658,7 +658,8 @@ final class DinoState: ObservableObject {
     /// This watch's code. It stays the same until a battle is fought,
     /// so your friend can type it in without it changing.
     var myBattleCode: BattleCode {
-        if let text = tamer.myBattleCode, let code = BattleCode.decode(text), code.species == pet.species {
+        if let text = tamer.myBattleCode, let code = BattleCode.decode(text),
+           code.species == pet.species, code.rarePrize == pet.isRarePrize {
             return code
         }
         let code = BattleCode(pet: pet)
@@ -726,8 +727,10 @@ final class DinoState: ObservableObject {
         let mine = playerPower()
         let theirs = Tuning.battlePower(rival.stage) + Double.random(in: 10...38)
         // Legendary dinos (spiky egg) hit harder and defend better.
-        let myAttack = mine + pet.species.attackBonus - rival.defenseBonus
-        let theirAttack = theirs + rival.attackBonus - pet.species.defenseBonus
+        // (rare-egg Ultimates get a smaller bonus; CPU rivals are always normal)
+        let rivalBonus = Tuning.battleBonus(species: rival, rarePrize: false)
+        let myAttack = mine + pet.battleBonus - rivalBonus
+        let theirAttack = theirs + rivalBonus - pet.battleBonus
         let myHit = min(0.85, max(0.25, 0.5 + (myAttack - theirs) / 100))
         let theirHit = min(0.8, max(0.2, 0.5 + (theirAttack - mine) / 100))
 

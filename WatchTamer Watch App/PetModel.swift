@@ -98,9 +98,6 @@ enum DinoSpecies: String, Codable, CaseIterable {
     /// T-Rex and Ultimate Raptor: only from the spiky egg, the best of the best.
     var isLegendary: Bool { self == .tRex || self == .megaRaptor }
 
-    /// Extra battle bonus for legendary dinos: they hit harder and defend better.
-    var attackBonus: Double { isLegendary ? Tuning.legendaryBonus : 0 }
-    var defenseBonus: Double { isLegendary ? Tuning.legendaryBonus : 0 }
 
     /// Dinos you can meet as CPU rivals (normal play only).
     static func roster(for stage: DinoStage) -> [DinoSpecies] {
@@ -191,6 +188,13 @@ enum Tuning {
     static let rareEggChance = 0.10
     static let spikyEggChance = 0.02
     static let legendaryBonus: Double = 15     // T-Rex / Ultimate Raptor attack and defense
+    static let rarePrizeBonus: Double = 8      // a rare egg's Ultimate (not Pachy)
+
+    /// Extra attack AND defense in battle: spiky-egg dinos +15, a rare egg's Ultimate +8.
+    static func battleBonus(species: DinoSpecies, rarePrize: Bool) -> Double {
+        if species.isLegendary { return legendaryBonus }
+        return rarePrize ? rarePrizeBonus : 0
+    }
     /// "Start new egg" can be used once per this many days (unless your dino died).
     static let newEggCooldownDays: Double = 14
     /// Safety net: if a deadly problem builds up while the app is closed, the dino
@@ -288,6 +292,12 @@ struct Pet: Codable, Equatable {
     var ageDays: Int { Int(ageMinutes / (24 * 60)) }
     var isCalling: Bool { hungerCall.isCalling || strengthCall.isCalling }
     var eggKind: EggKind { eggKindSaved ?? .normal }
+
+    /// A rare egg that reached its Ultimate (Pachy doesn't count): a little stronger in battle.
+    var isRarePrize: Bool { eggKind == .rare && stage == .ultimate && species != .pachycephalosaurus }
+
+    /// Extra attack and defense in battle (see Tuning.battleBonus).
+    var battleBonus: Double { Tuning.battleBonus(species: species, rarePrize: isRarePrize) }
 
     /// A brand-new egg of the given kind. Rare and spiky eggs pick their prize now.
     static func newEgg(generation: Int, kind: EggKind) -> Pet {

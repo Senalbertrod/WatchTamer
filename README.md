@@ -58,10 +58,10 @@ Codes refresh after every battle, so swap new ones for a rematch. Use **NEW CODE
 | Egg | Chance | What's inside |
 | --- | --- | --- |
 | Normal (spotted) | 88% | Care, training and battles decide (chart above) |
-| Rare (striped, with sparkles) | 10% | Grows like a normal egg, then becomes a random Ultimate (Styracosaurus, Spinosaurus, Ankylosaur or Brachio, 25% each) with no battles needed. Neglect it as a Champion (6+ care mistakes) and it becomes a Pachy |
+| Rare (striped, with sparkles) | 10% | Grows like a normal egg, then becomes a random Ultimate (Styracosaurus, Spinosaurus, Ankylosaur or Brachio, 25% each) with no battles needed, and a little stronger in battle (+8 attack and defense). Neglect it as a Champion (6+ care mistakes) and it becomes a Pachy |
 | Spiky | 2% | The rarest. Goes straight from Dino Kid to **T-Rex** or **Raptor** (50/50) |
 
-**T-Rex and Raptor only come from the spiky egg.** They're the best of the best: +15 attack and +15 defense in every battle (CPU and friend), so they beat other Ultimates about 2 times out of 3. They never become a Pachy, but they can still lose and can still die if neglected.
+**T-Rex and Raptor only come from the spiky egg.** They're the best of the best: +15 attack and +15 defense in every battle (CPU and friend), so they beat other Ultimates about 2 times out of 3. A rare egg's Ultimate sits in between with +8 (Pachy gets no bonus). They never become a Pachy, but they can still lose and can still die if neglected.
 
 **Normal egg path:**
 
