@@ -79,3 +79,7 @@ How long each stage lasts at Classic speed: Egg 10 min · Baby I 10 min · Baby 
 ## Privacy
 
 WatchTamer has no accounts, ads, analytics or network code. Your dino, your settings and your step count stay on your watch. Step data is only read to turn walking into training; it is never sent anywhere. For the App Store privacy label, this app is **Data Not Collected**.
+
+## License
+
+WatchTamer is free and open source under the [MIT License](LICENSE). You're welcome to play it, learn from it, change it and share it. Just keep the copyright notice.
