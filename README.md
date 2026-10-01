@@ -1,6 +1,6 @@
 # WatchTamer 🦖
 
-A classic 90s-style virtual pet for Apple Watch, the kind you raised on a keychain and then plugged into a friend's to battle. It uses a dot-matrix LCD, icon menus and care mistakes, with dinosaurs in place of monsters.
+A classic 90s-style virtual pet for Apple Watch, the kind you raised on a keychain and then plugged into a friend's to battle. It uses a dot-matrix LCD, icon menus and a dinosaur that grows from a tiny egg into a mighty Ultimate.
 
 ![The WatchTamer dinosaurs](docs/dinosaurs.png)
 
