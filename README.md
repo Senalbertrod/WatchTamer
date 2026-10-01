@@ -2,6 +2,23 @@
 
 A classic 90s-style virtual pet for Apple Watch, the kind you raised on a keychain and then plugged into a friend's to battle. It uses a dot-matrix LCD, icon menus and care mistakes, with dinosaurs in place of monsters.
 
+![The 12 WatchTamer dinosaurs](docs/dinosaurs.png)
+
+## Requirements
+
+- Apple Watch running **watchOS 26.4** or later
+- **Xcode 26.4** or later on a Mac, to build and install it
+- No iPhone app, account or internet connection needed
+
+## Build & run
+
+1. Open `WatchTamer.xcodeproj` in Xcode.
+2. Select the target **WatchTamer Watch App** → **Signing & Capabilities** → choose your own **Team** (a free Apple ID works for your own watch).
+3. Pick your Apple Watch (or a watch simulator) at the top of the window and press **▶ Run**.
+4. On first launch, allow **Motion & Fitness** (for walk training) and **Notifications** (for care reminders).
+
+Builds run from Xcode include a **Testing** section in Settings (skip time, add steps, evolve now, make sick). App Store and TestFlight builds leave it out automatically.
+
 ## How to play
 
 | Icon | What it does |
@@ -22,7 +39,7 @@ A classic 90s-style virtual pet for Apple Watch, the kind you raised on a keycha
 - **Charger pause:** if the watch is charging when the game opens or closes, it pauses automatically and resumes once unplugged (can be switched off).
 - **Safety net:** your dino can never die while the app is closed. It can still get hungry or sick, but it waits for you, and after you come back you get at least an hour (game time) to fix things.
 
-Swipe left for **Settings**: Classic (real time) or Fast (10×) speed, night screen, care reminders, and walk training. Builds run from Xcode also show testing buttons; App Store builds hide them.
+Swipe left for **Settings**: pause (daycare), pause while charging, Classic (real time) or Fast (10×) speed, night screen, notification switches, walk training and steps per rep.
 
 ## Battling a friend (battle codes)
 
@@ -46,7 +63,7 @@ Champion → Ultimate needs 15+ battles with an 80%+ win rate at that stage.
 6+ care mistakes as a Champion → Pachycephalosaurus.
 ```
 
-Timing (Classic speed): Baby I 10 min → Baby II 6 h → Rookie 24 h → Champion 36 h → Ultimate.
+How long each stage lasts at Classic speed: Egg 10 min · Baby I 10 min · Baby II 6 h · Rookie 24 h · Champion 36 h (then it evolves once it meets the battle goal). Fast speed is 10× quicker. Time spent paused (daycare or charging) doesn't count.
 
 ## Project layout
 
@@ -55,4 +72,10 @@ Timing (Classic speed): Baby I 10 min → Baby II 6 h → Rookie 24 h → Champi
 - `ContentView.swift`: the device screen (icons + LCD)
 - `DinoSpriteView.swift`: LCD palette and pixel renderer
 - `PixelArt.swift`: all dinosaur and icon sprites as dot-matrix art
+- `BattleCode.swift`: friend battle codes and the shared, seeded fight
 - `SettingsView.swift`: settings, help and testing tools
+- `docs/dinosaurs.png`: the roster image above
+
+## Privacy
+
+WatchTamer has no accounts, ads, analytics or network code. Your dino, your settings and your step count stay on your watch. Step data is only read to turn walking into training; it is never sent anywhere. For the App Store privacy label, this app is **Data Not Collected**.
