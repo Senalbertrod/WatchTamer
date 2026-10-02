@@ -4,6 +4,12 @@ A classic 90s-style virtual pet for Apple Watch, the kind you raised on a keycha
 
 ![The WatchTamer dinosaurs](docs/dinosaurs.png)
 
+## Watch the commercial
+
+[![WatchTamer 90s-style commercial: click to play](docs/commercial-preview.png)](docs/WatchTamer-commercial.mp4)
+
+A 40-second, 90s-style TV commercial for the game. Click the picture to play it.
+
 ## Requirements
 
 - Apple Watch running **watchOS 26.4** or later
@@ -91,6 +97,7 @@ How long each stage lasts at Classic speed: Egg 10 min · Hatchling 10 min · Di
 - `BattleCode.swift`: friend battle codes and the shared, seeded fight
 - `SettingsView.swift`: settings, help and testing tools
 - `docs/dinosaurs.png` and `docs/evolution.png`: the pictures in this README
+- `docs/WatchTamer-commercial.mp4`: the 90s-style commercial
 
 ## Privacy
 
