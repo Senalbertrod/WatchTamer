@@ -64,7 +64,7 @@ struct SettingsView: View {
             }
 
             Section("HOW TO PLAY") {
-                Text("Feed MEAT for hunger hearts, PROTEIN for strength. TRAIN by tapping fast or just walking. FLUSH poop, give MEDICINE when you see a skull. The ! light means your dino needs you. Bedtime is 8-10pm: light off = asleep (needs pause), light on = awake and ready to play any time. Leaving the game at night turns the light off for you. Good care + lots of training + winning battles = the best dinosaurs. Every new egg rolls the dice: a striped RARE egg (10%) becomes a random, slightly stronger Ultimate, and the SPIKY egg (2%) is the only way to get a T-Rex or Raptor. The game always runs in real time, like the 90s toys. Don't open it for 2 weeks and your dino dies of loneliness.")
+                Text("Feed MEAT for hunger hearts, PROTEIN for strength. TRAIN by tapping fast or just walking. FLUSH poop, give MEDICINE when you see a skull. The ! light means your dino needs you. Bedtime is 8-10pm: light off = asleep (needs pause), light on = awake and ready to play any time. Leaving the game at night turns the light off for you. Every battle uses 1 strength heart, so feed PROTEIN or train before fighting again. Each friend's code works only once: for a rematch, they need a new code. Good care + lots of training + winning battles = the best dinosaurs. Every new egg rolls the dice: a striped RARE egg (10%) becomes a random, slightly stronger Ultimate, and the SPIKY egg (2%) is the only way to get a T-Rex or Raptor. The game always runs in real time, like the 90s toys. Don't open it for 2 weeks and your dino dies of loneliness.")
                     .font(.system(size: 12))
             }
 

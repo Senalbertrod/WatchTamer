@@ -100,6 +100,15 @@ struct Tamer: Codable, Equatable {
 
     var myBattleCode: String? = nil  // snapshot shown to friends; renewed after each battle
 
+    /// Friend codes already battled, newest last. Each friend code works only once,
+    /// so the same code can't be re-entered to farm wins. Kept across new eggs.
+    var usedFriendCodesSaved: [String]? = nil
+    static let usedFriendCodesLimit = 100
+    var usedFriendCodes: [String] {
+        get { usedFriendCodesSaved ?? [] }
+        set { usedFriendCodesSaved = Array(newValue.suffix(Tamer.usedFriendCodesLimit)) }
+    }
+
     /// When the current egg was started. "Start new egg" unlocks again
     /// `Tuning.newEggCooldownDays` later (or right away if the dino dies).
     var lastNewEgg: Date? = nil
@@ -662,7 +671,16 @@ final class DinoState: ObservableObject {
             haptic(.failure)
             return
         }
+        // Each friend code works only once (compared in its clean "ABC-123" form).
+        if tamer.usedFriendCodes.contains(theirs.text) {
+            showToast("ALREADY BATTLED")
+            haptic(.failure)
+            return
+        }
         guard battleReady() else { screen = .home; return }
+        // Remember it right away, so quitting mid-fight doesn't allow a redo.
+        tamer.usedFriendCodes.append(theirs.text)
+        save()
         isFriendBattle = true
         screen = .battle
         let plan = BattleCode.duel(mine: mine, theirs: theirs)

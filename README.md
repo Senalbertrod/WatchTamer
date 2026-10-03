@@ -52,7 +52,9 @@ Swipe left for **Settings**: night screen, notification switches, walk training 
 2. Tap the screen to open code entry, then tap the text box to type your friend's code (keyboard, Scribble or dictation) while they type yours. Tap **⚡ BATTLE!**
 3. Both watches play out the **same fight** with the same winner, with no internet or pairing needed.
 
-Codes refresh after every battle, so swap new ones for a rematch. Use **NEW CODE** on the entry screen to make a fresh one. Mistyped codes are rejected before the battle starts.
+**Each code works only once.** Your watch remembers the last 100 friend codes you battled; typing one again shows **ALREADY BATTLED** and nothing happens. Codes refresh after every battle, so swap new ones for a rematch. Use **NEW CODE** on the entry screen to make a fresh one. Mistyped codes are rejected before the battle starts.
+
+**Battling tires your dino.** Every battle (CPU or friend) uses 1 strength heart. With no strength hearts left your dino is **TOO WEAK** to fight, so feed it protein or train it first.
 
 ## Eggs and evolution
 
