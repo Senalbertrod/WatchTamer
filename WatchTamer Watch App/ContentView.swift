@@ -430,6 +430,9 @@ struct ContentView: View {
             Text(state.tamer.myBattleCode ?? "------")
                 .font(.system(size: 18, weight: .heavy, design: .monospaced))
                 .foregroundColor(pal.dot)
+            if let last = state.tamer.lastBattleCode {
+                lcdText("LAST CODE \(last)", 8)
+            }
             lcdText("TAP TO ENTER", 10)
                 .opacity(blink ? 1 : 0.4)
             lcdText("FRIEND'S CODE", 10)
@@ -451,7 +454,12 @@ struct ContentView: View {
                     .textInputAutocapitalization(.characters)
                     .autocorrectionDisabled()
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
-                    .onSubmit { submitFriendCode() }
+                    // "Done" only closes the keyboard; the fight starts with ⚡ BATTLE!
+                    // so you can show your code to your friend first.
+                    .onSubmit {
+                        let typed = friendCodeInput.filter { $0.isLetter || $0.isNumber }
+                        codeError = !typed.isEmpty && BattleCode.decode(friendCodeInput) == nil
+                    }
 
                 if codeError {
                     Text("BAD CODE. CHECK IT AND TRY AGAIN.")
@@ -478,6 +486,11 @@ struct ContentView: View {
                 Text(state.tamer.myBattleCode ?? "------")
                     .font(.system(size: 20, weight: .heavy, design: .monospaced))
                     .foregroundColor(.green)
+                if let last = state.tamer.lastBattleCode {
+                    Text("LAST CODE \(last)")
+                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                        .foregroundColor(.secondary)
+                }
                 Button("NEW CODE") { state.newBattleCode() }
                     .font(.system(size: 12, weight: .bold, design: .monospaced))
             }

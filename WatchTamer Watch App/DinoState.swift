@@ -100,6 +100,11 @@ struct Tamer: Codable, Equatable {
 
     var myBattleCode: String? = nil  // snapshot shown to friends; renewed after each battle
 
+    /// The code this watch used in its most recent friend battle. Shown as
+    /// "LAST CODE" so a friend who was too slow can still type it in and get
+    /// the exact same fight.
+    var lastBattleCode: String? = nil
+
     /// Friend codes already battled, newest last. Each friend code works only once,
     /// so the same code can't be re-entered to farm wins. Kept across new eggs.
     var usedFriendCodesSaved: [String]? = nil
@@ -680,6 +685,7 @@ final class DinoState: ObservableObject {
         guard battleReady() else { screen = .home; return }
         // Remember it right away, so quitting mid-fight doesn't allow a redo.
         tamer.usedFriendCodes.append(theirs.text)
+        tamer.lastBattleCode = mine.text
         save()
         isFriendBattle = true
         screen = .battle
