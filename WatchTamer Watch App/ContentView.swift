@@ -129,11 +129,6 @@ struct ContentView: View {
                     pal.dot
                 }
 
-                // Paused (daycare or charging): everything is frozen
-                if state.isPaused {
-                    pausedScreen(dot: dot)
-                }
-
                 if let toast = state.toast {
                     VStack {
                         Text(toast)
@@ -151,19 +146,11 @@ struct ContentView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .overlay(RoundedRectangle(cornerRadius: 8).stroke(pal.bezel, lineWidth: 2))
             .contentShape(Rectangle())
-            .onLongPressGesture(minimumDuration: 1.0) {
-                // Hold the screen for 1 second to pause (daycare)
-                if state.screen == .home && !state.isPaused { state.pause(.daycare) }
-            }
             .onTapGesture { lcdTapped() }
         }
     }
 
     private func lcdTapped() {
-        if state.isPaused {
-            state.resume()
-            return
-        }
         switch state.screen {
         case .home:
             if pet.stage == .egg { state.tapEgg() }
@@ -218,28 +205,6 @@ struct ContentView: View {
             .foregroundColor(pal.dot)
             .lineLimit(1)
             .minimumScaleFactor(0.6)
-    }
-
-    // MARK: - Paused
-
-    private func pausedScreen(dot: CGFloat) -> some View {
-        let charging = state.tamer.pausedReason == .charger
-        return ZStack {
-            pal.screen
-            LCDGrid(dot: dot, color: pal.ghost)
-            VStack(spacing: 3) {
-                HStack(spacing: 4) {
-                    let pausedRows = DinoSprite.rows(pet.spriteKey, frame: 0)
-                    PixelSprite(rows: pausedRows, dot: fitDot(pausedRows, dot: dot, cols: 18, rows: 8), color: pal.dot)
-                    PixelSprite(rows: PixelArt.zzz, dot: max(1.5, dot * 0.6), color: pal.dot)
-                }
-                lcdText(charging ? "CHARGING" : "DAYCARE", 12)
-                lcdText("TIME IS PAUSED", 9)
-                lcdText(charging ? "UNPLUG OR TAP TO PLAY" : "TAP TO RESUME", 8)
-                    .opacity(blink ? 1 : 0.5)
-            }
-            .padding(4)
-        }
     }
 
     // MARK: - Home scene
@@ -396,8 +361,8 @@ struct ContentView: View {
                 lcdText("TRAINED \(pet.trainings)x", 9)
             case 4:
                 lcdText("BATTLES", 11)
-                lcdText("WIN \(pet.wins)/\(pet.battles)  \(Int(pet.winRate * 100))%", 9)
-                lcdText("ALL \(pet.totalWins)/\(pet.totalBattles)", 9)
+                lcdText("THIS STAGE  W\(pet.wins) L\(pet.battles - pet.wins)  \(Int(pet.winRate * 100))%", 9)
+                lcdText("ALL TIME  W\(pet.totalWins) L\(pet.totalBattles - pet.totalWins)", 9)
             default:
                 lcdText("CARE", 11)
                 lcdText("MISTAKES \(pet.careMistakes)", 9)

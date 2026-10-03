@@ -23,13 +23,13 @@ A 40-second, 90s-style TV commercial for the game. Click the picture to play it.
 3. Pick your Apple Watch (or a watch simulator) at the top of the window and press **▶ Run**.
 4. On first launch, allow **Motion & Fitness** (for walk training) and **Notifications** (for care reminders).
 
-Builds run from Xcode include a **Testing** section in Settings (skip time, add steps, evolve now, make sick, lay a rare or spiky egg). App Store and TestFlight builds leave it out automatically.
+Builds run from Xcode include a **Testing** section in Settings (skip time, add steps, evolve now, make sick, pretend 14 days away, lay a rare or spiky egg). App Store and TestFlight builds leave it out automatically.
 
 ## How to play
 
 | Icon | What it does |
 | --- | --- |
-| ⚖️ **Status** | Tap through 6 pages: form & age, hunger hearts, strength hearts, effort, battle record, care |
+| ⚖️ **Status** | Tap through 6 pages: form & age, hunger hearts, strength hearts, effort, battle record (wins and losses), care |
 | 🍴 **Feed** | **Meat** = +1 hunger heart (+1g). **Protein** = +1 strength heart (+2g) |
 | 🏋️ **Train** | **TAP**: mash the screen for 5 seconds to fill the meter. **WALK**: just walk; every 250 steps (adjustable) counts as a training rep, even while the app is closed |
 | ⚡ **Battle** | **CPU**: fight a computer rival. **FRIEND**: swap battle codes (see below). First to 3 hits wins. Rookie and up |
@@ -38,14 +38,13 @@ Builds run from Xcode include a **Testing** section in Settings (skip time, add 
 | ➕ **Medicine** | Cure sickness and battle injuries (skull icon) |
 | ⚠️ **Call** | Blinks when your dino needs you. Ignore it for 10 minutes = 1 care mistake |
 
-**Notifications:** when the app is closed, your watch alerts you when your dino gets hungry 🍖, weak 💪, poops 💩 (each pile, with a warning before it gets sick), or gets sick 💀. Each type can be switched off in Settings.
+**Notifications:** when the app is closed, your watch alerts you when your dino gets hungry 🍖, weak 💪, poops 💩 (each pile, with a warning before it gets sick), or gets sick 💀. Each type can be switched off in Settings. You also get a warning 2 days and 1 day before the 2-week limit below.
 
-**Taking your watch off? Your dino is safe.**
-- **Daycare pause:** hold the screen for 1 second (or use Settings) to freeze time completely. Tap to resume; the paused time is skipped.
-- **Charger pause:** if the watch is charging when the game opens or closes, it pauses automatically and resumes once unplugged (can be switched off).
-- **Safety net:** your dino can never die while the app is closed. It can still get hungry or sick, but it waits for you, and after you come back you get at least an hour (game time) to fix things.
+**Time never stops.** Like the 90s toys, the game always runs in real time, with no pause and no fast-forward.
+- **Short breaks are safe:** while the app is closed, your dino can get hungry or sick, but it can't die. It waits for you, and after you come back you get at least an hour to fix things.
+- **Don't abandon it:** if you don't open WatchTamer for **2 weeks in a row**, your dino dies of loneliness.
 
-Swipe left for **Settings**: pause (daycare), pause while charging, Classic (real time) or Fast (10×) speed, night screen, notification switches, walk training and steps per rep.
+Swipe left for **Settings**: night screen, notification switches, walk training and steps per rep.
 
 ## Battling a friend (battle codes)
 
@@ -83,7 +82,7 @@ Champion → Ultimate needs 15+ battles with an 80%+ win rate at that stage.
 6+ care mistakes as a Champion → Pachy.
 ```
 
-How long each stage lasts at Classic speed: Egg 10 min · Hatchling 10 min · Dino Kid 6 h · Rookie 24 h · Champion 36 h (a normal egg then evolves once it meets the battle goal). Fast speed is 10× quicker. Time spent paused (daycare or charging) doesn't count.
+How long each stage lasts: Egg 10 min · Hatchling 10 min · Dino Kid 6 h · Rookie 24 h · Champion 36 h (a normal egg then evolves once it meets the battle goal). A spiky egg reaches its T-Rex or Raptor in about 6 hours 20 minutes.
 
 **Fair play:** **Start new egg** (in Settings) can be used once every 2 weeks, so you can't keep restarting to fish for a spiky egg. Keep your dino as long as you like; if it dies, you get a new egg right away.
 

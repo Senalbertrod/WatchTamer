@@ -108,7 +108,7 @@ enum DinoSpecies: String, Codable, CaseIterable {
     static let rareUltimates: [DinoSpecies] = [.styracosaurus, .spinosaurus, .ankylosaurus, .brachiosaurus]
 }
 
-// MARK: - Tuning (all times are GAME minutes; game speed multiplies real time)
+// MARK: - Tuning (all times are game minutes; the game always runs in real time)
 
 enum Tuning {
     /// How long each stage lasts before it evolves.
@@ -200,6 +200,8 @@ enum Tuning {
     /// Safety net: if a deadly problem builds up while the app is closed, the dino
     /// survives and you get at least this many game minutes after you come back.
     static let comebackGrace: Double = 60
+    /// Not opening the game this many days in a row = the dino dies of loneliness.
+    static let lonelyDays: Double = 14
 }
 
 // MARK: - Events the simulation reports back

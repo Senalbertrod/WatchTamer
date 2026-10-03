@@ -14,24 +14,6 @@ struct SettingsView: View {
     var body: some View {
         List {
             Section("GAME") {
-                Toggle("Pause (daycare)", isOn: Binding(
-                    get: { state.isPaused },
-                    set: { $0 ? state.pause(.daycare) : state.resume() }
-                ))
-
-                Toggle("Pause while charging", isOn: Binding(
-                    get: { state.tamer.pauseWhenCharging },
-                    set: { state.setPauseWhenCharging($0) }
-                ))
-
-                Picker("Speed", selection: Binding(
-                    get: { state.tamer.speed },
-                    set: { state.setSpeed($0) }
-                )) {
-                    Text("Classic (real time)").tag(1.0)
-                    Text("Fast (10x)").tag(10.0)
-                }
-
                 Toggle("Night screen", isOn: Binding(
                     get: { state.tamer.nightScreen },
                     set: { state.tamer.nightScreen = $0; state.save() }
@@ -82,7 +64,7 @@ struct SettingsView: View {
             }
 
             Section("HOW TO PLAY") {
-                Text("Feed MEAT for hunger hearts, PROTEIN for strength. TRAIN by tapping fast or just walking. FLUSH poop, give MEDICINE when you see a skull. The ! light means your dino needs you. Bedtime is 8-10pm: light off = asleep (needs pause), light on = awake and ready to play any time. Leaving the game at night turns the light off for you. Good care + lots of training + winning battles = the best dinosaurs. Every new egg rolls the dice: a striped RARE egg (10%) becomes a random, slightly stronger Ultimate, and the SPIKY egg (2%) is the only way to get a T-Rex or Raptor. Taking the watch off? Hold the screen for 1 second to pause (daycare). Charging pauses automatically.")
+                Text("Feed MEAT for hunger hearts, PROTEIN for strength. TRAIN by tapping fast or just walking. FLUSH poop, give MEDICINE when you see a skull. The ! light means your dino needs you. Bedtime is 8-10pm: light off = asleep (needs pause), light on = awake and ready to play any time. Leaving the game at night turns the light off for you. Good care + lots of training + winning battles = the best dinosaurs. Every new egg rolls the dice: a striped RARE egg (10%) becomes a random, slightly stronger Ultimate, and the SPIKY egg (2%) is the only way to get a T-Rex or Raptor. The game always runs in real time, like the 90s toys. Don't open it for 2 weeks and your dino dies of loneliness.")
                     .font(.system(size: 12))
             }
 
@@ -93,6 +75,7 @@ struct SettingsView: View {
                 Button("Add 250 steps") { state.creditSteps(250) }
                 Button("Evolve now") { state.debugEvolve() }
                 Button("Make sick") { state.debugSick() }
+                Button("Away 14 days") { state.debugLonely() }
                 Button("Lay rare egg") { state.debugEgg(.rare) }
                 Button("Lay spiky egg") { state.debugEgg(.spiky) }
             }
