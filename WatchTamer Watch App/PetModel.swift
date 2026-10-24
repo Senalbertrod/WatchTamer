@@ -111,6 +111,12 @@ enum DinoSpecies: String, Codable, CaseIterable {
 // MARK: - Tuning (all times are game minutes; the game always runs in real time)
 
 enum Tuning {
+    // Walking: every this many steps gives food, protein or a training.
+    // Each one stops while its hearts are full (day or night).
+    static let walkFoodSteps = 250
+    static let walkProteinSteps = 500
+    static let walkTrainSteps = 1000
+
     /// How long each stage lasts before it evolves.
     static func stageDuration(_ s: DinoStage) -> Double {
         switch s {

@@ -70,7 +70,7 @@ enum MenuItem: CaseIterable {
 
 struct Tamer: Codable, Equatable {
     var walkTraining = true
-    var stepsPerRep = 250
+    var stepsPerRep = 250            // not used anymore (walking amounts are in Tuning); kept so older saves load
     var notifications = true
     // Per-type switches (optional so older saves still load; nil = on)
     var notifyHungerSetting: Bool? = nil
@@ -89,12 +89,23 @@ struct Tamer: Codable, Equatable {
         get { notifySickSetting ?? true }
         set { notifySickSetting = newValue }
     }
-    var nightScreen = false          // false = classic grey-green LCD, true = black + neon
+    var nightScreen = false          // not used anymore (the night screen was removed); kept so older saves load
 
     var stepAnchor = Date()
     var stepsSinceAnchor = 0
     var lastStepQuery: Date? = nil
-    var stepBank = 0                 // steps toward the next walk rep
+    var stepBank = 0                 // steps toward the next walk training
+    // Steps toward the next walk food / protein (optional so older saves still load)
+    var foodBankSaved: Int? = nil
+    var proteinBankSaved: Int? = nil
+    var foodBank: Int {
+        get { foodBankSaved ?? 0 }
+        set { foodBankSaved = newValue }
+    }
+    var proteinBank: Int {
+        get { proteinBankSaved ?? 0 }
+        set { proteinBankSaved = newValue }
+    }
     var lifetimeSteps = 0
     var walkReps = 0
 
@@ -577,7 +588,7 @@ final class DinoState: ObservableObject {
         creditSteps(newSteps)
     }
 
-    /// Walking turns into training. Also used by the debug "+steps" button.
+    /// Walking turns into food, protein and training. Also used by the debug "+steps" button.
     func creditSteps(_ steps: Int) {
         guard steps > 0 else { return }
         tamer.lifetimeSteps += steps
@@ -593,19 +604,43 @@ final class DinoState: ObservableObject {
             return
         }
 
+        // Walking feeds and trains: food every 250 steps, protein every 500,
+        // a training every 1,000. Each stops while its hearts are full, and the
+        // steps toward it wait (they don't pile up) until a heart goes down.
+        tamer.foodBank += steps
+        tamer.proteinBank += steps
         tamer.stepBank += steps
-        let perRep = max(50, tamer.stepsPerRep)
-        var reps = 0
-        while tamer.stepBank >= perRep && reps < 20 {
-            tamer.stepBank -= perRep
-            reps += 1
-            pet.applyTraining(success: true, weightLoss: 1)
+        var foods = 0, proteins = 0, reps = 0
+        while tamer.foodBank >= Tuning.walkFoodSteps && pet.hunger < 4 {
+            tamer.foodBank -= Tuning.walkFoodSteps
+            pet.hunger = min(4, pet.hunger + 1)
+            pet.weight = min(99, pet.weight + 1)
+            foods += 1
         }
-        if reps == 20 { tamer.stepBank = min(tamer.stepBank, perRep - 1) }
-        if reps > 0 {
-            tamer.walkReps += reps
+        while tamer.stepBank >= Tuning.walkTrainSteps && pet.strength < 4 {
+            tamer.stepBank -= Tuning.walkTrainSteps
+            pet.applyTraining(success: true, weightLoss: 1)
+            reps += 1
+        }
+        while tamer.proteinBank >= Tuning.walkProteinSteps && pet.strength < 4 {
+            tamer.proteinBank -= Tuning.walkProteinSteps
+            pet.strength = min(4, pet.strength + 1)
+            pet.weight = min(99, pet.weight + 2)
+            proteins += 1
+        }
+        if pet.hunger >= 4 { tamer.foodBank = min(tamer.foodBank, Tuning.walkFoodSteps - 1) }
+        if pet.strength >= 4 {
+            tamer.proteinBank = min(tamer.proteinBank, Tuning.walkProteinSteps - 1)
+            tamer.stepBank = min(tamer.stepBank, Tuning.walkTrainSteps - 1)
+        }
+        tamer.walkReps += reps
+        if foods + proteins + reps > 0 {
             haptic(.success)
-            showToast(reps == 1 ? "WALK TRAINING!" : "WALK x\(reps)!")
+            var parts: [String] = []
+            if foods > 0 { parts.append("FOOD+\(foods)") }
+            if proteins > 0 { parts.append("PROTEIN+\(proteins)") }
+            if reps > 0 { parts.append("TRAIN+\(reps)") }
+            showToast("WALK " + parts.joined(separator: " "))
             if screen == .home && anim == .none {
                 anim = .walkRep
                 Task {

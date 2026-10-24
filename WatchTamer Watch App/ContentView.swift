@@ -28,7 +28,7 @@ struct ContentView: View {
 
     private let stepTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
-    private var pal: LCDPalette { LCDPalette.current(night: state.tamer.nightScreen) }
+    private var pal: LCDPalette { .classic }
     private var pet: Pet { state.pet }
 
     var body: some View {
@@ -554,13 +554,12 @@ struct ContentView: View {
 
     private func walkScene(dot: CGFloat) -> some View {
         let t = state.tamer
-        let per = max(50, t.stepsPerRep)
-        return VStack(spacing: 3) {
+        return VStack(spacing: 2) {
             HStack(spacing: 4) {
                 Image(systemName: "figure.walk")
                     .font(.system(size: 16, weight: .bold))
                     .foregroundColor(pal.dot)
-                lcdText("WALK TRAINING", 10)
+                lcdText("WALKING", 10)
             }
             if !CMPedometer.isStepCountingAvailable() {
                 lcdText("NO STEP SENSOR", 9)
@@ -569,15 +568,23 @@ struct ContentView: View {
                 lcdText("TURNED OFF", 9)
                 lcdText("SWIPE → SETTINGS", 8)
             } else {
-                lcdText("\(t.stepBank)/\(per) STEPS", 10)
-                LCDBar(progress: Double(t.stepBank) / Double(per), color: pal.dot, height: 7)
-                    .padding(.horizontal, 6)
-                lcdText("REPS \(t.walkReps)  TRAINED \(pet.trainings)", 8)
+                walkRow("FOOD", t.foodBank, Tuning.walkFoodSteps, full: pet.hunger >= 4)
+                walkRow("PROTEIN", t.proteinBank, Tuning.walkProteinSteps, full: pet.strength >= 4)
+                walkRow("TRAIN", t.stepBank, Tuning.walkTrainSteps, full: pet.strength >= 4)
                 lcdText("JUST WALK - IT COUNTS!", 7)
                     .opacity(0.7)
             }
         }
         .padding(4)
+    }
+
+    /// One line on the walk screen: steps toward the next food / protein / training.
+    private func walkRow(_ label: String, _ steps: Int, _ per: Int, full: Bool) -> some View {
+        VStack(spacing: 1) {
+            lcdText(full ? "\(label)  FULL" : "\(label)  \(steps)/\(per)", 8)
+            LCDBar(progress: full ? 1 : Double(steps) / Double(per), color: pal.dot, height: 4)
+                .padding(.horizontal, 6)
+        }
     }
 
     // MARK: - Battle

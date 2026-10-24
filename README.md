@@ -31,7 +31,7 @@ Builds run from Xcode include a **Testing** section in Settings (skip time, add 
 | --- | --- |
 | ⚖️ **Status** | Tap through 6 pages: form & age, hunger hearts, strength hearts, effort, battle record (wins and losses), care |
 | 🍴 **Feed** | **Meat** = +1 hunger heart (+1g). **Protein** = +1 strength heart (+2g) |
-| 🏋️ **Train** | **TAP**: mash the screen for 5 seconds to fill the meter. **WALK**: just walk; every 250 steps (adjustable) counts as a training rep, even while the app is closed |
+| 🏋️ **Train** | **TAP**: mash the screen for 5 seconds to fill the meter. **WALK**: just walk, even while the app is closed (see Walking below) |
 | ⚡ **Battle** | **CPU**: fight a computer rival. **FRIEND**: swap battle codes (see below). First to 3 hits wins. Rookie and up |
 | 🌊 **Flush** | Clean up poop. 8 piles = your dino gets sick |
 | 💡 **Lights** | Bedtime starts at 8–10pm (by stage). **Light off** = your dino sleeps and its needs pause. **Light on** = it wakes up, so you can feed, train, battle, clean and heal any time of day or night. Leave the game during bedtime and the light switches off by itself. |
@@ -44,7 +44,17 @@ Builds run from Xcode include a **Testing** section in Settings (skip time, add 
 - **Short breaks are safe:** while the app is closed, your dino can get hungry or sick, but it can't die. It waits for you, and after you come back you get at least an hour to fix things.
 - **Don't abandon it:** if you don't open WatchTamer for **2 weeks in a row**, your dino dies of loneliness.
 
-Swipe left for **Settings**: night screen, notification switches, walk training and steps per rep.
+Swipe left for **Settings**: notification switches, walking on or off, and a short how to play.
+
+**Walking feeds and trains your dino**, day or night (even while it sleeps):
+
+| Steps | Your dino gets |
+| --- | --- |
+| Every 250 | Food: +1 hunger heart (+1g) |
+| Every 500 | Protein: +1 strength heart (+2g) |
+| Every 1,000 | A training: +1 strength heart (−1g), counts toward evolution |
+
+Each one stops while its hearts are full, and starts again when a heart goes down. Pick WALK on the Train menu to see your steps toward each one.
 
 ## Battling a friend (battle codes)
 
@@ -104,7 +114,11 @@ How long each stage lasts: Egg 10 min · Hatchling 10 min · Dino Kid 6 h · Roo
 
 ## Privacy
 
-WatchTamer has no accounts, ads, analytics or network code. Your dino, your settings and your step count stay on your watch. Step data is only read to turn walking into training; it is never sent anywhere. For the App Store privacy label, this app is **Data Not Collected**.
+WatchTamer has no accounts, ads, analytics or network code. Your dino, your settings and your step count stay on your watch. Step data is only read to turn walking into food, protein and training; it is never sent anywhere. For the App Store privacy label, this app is **Data Not Collected**.
+
+## Author
+
+Created by Senalbert Rodriguez.
 
 ## Author
 
