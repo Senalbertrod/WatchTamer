@@ -44,9 +44,9 @@ enum BattlePhase: Equatable {
     case result(Bool)
 }
 
+/// Only kept so saves from older versions (which had daycare/charger pause) still load.
 enum PauseReason: String, Codable {
-    case daycare   // the player paused
-    case charger   // paused automatically because the watch was charging
+    case daycare, charger
 }
 
 enum MenuItem: CaseIterable {
@@ -69,9 +69,8 @@ enum MenuItem: CaseIterable {
 // MARK: - Player / device settings (not tied to one pet)
 
 struct Tamer: Codable, Equatable {
-    var speed: Double = 1            // 1 = classic real-time, 10 = fast
     var walkTraining = true
-    var stepsPerRep = 250
+    var stepsPerRep = 250            // not used anymore (walking amounts are in Tuning); kept so older saves load
     var notifications = true
     // Per-type switches (optional so older saves still load; nil = on)
     var notifyHungerSetting: Bool? = nil
@@ -90,27 +89,51 @@ struct Tamer: Codable, Equatable {
         get { notifySickSetting ?? true }
         set { notifySickSetting = newValue }
     }
-    var nightScreen = false          // false = classic grey-green LCD, true = black + neon
+    var nightScreen = false          // not used anymore (the night screen was removed); kept so older saves load
 
     var stepAnchor = Date()
     var stepsSinceAnchor = 0
     var lastStepQuery: Date? = nil
-    var stepBank = 0                 // steps toward the next walk rep
+    var stepBank = 0                 // steps toward the next walk training
+    // Steps toward the next walk food / protein (optional so older saves still load)
+    var foodBankSaved: Int? = nil
+    var proteinBankSaved: Int? = nil
+    var foodBank: Int {
+        get { foodBankSaved ?? 0 }
+        set { foodBankSaved = newValue }
+    }
+    var proteinBank: Int {
+        get { proteinBankSaved ?? 0 }
+        set { proteinBankSaved = newValue }
+    }
     var lifetimeSteps = 0
     var walkReps = 0
 
     var myBattleCode: String? = nil  // snapshot shown to friends; renewed after each battle
 
+    /// The code this watch used in its most recent friend battle. Shown as
+    /// "LAST CODE" so a friend who was too slow can still type it in and get
+    /// the exact same fight.
+    var lastBattleCode: String? = nil
+
+    /// Friend codes already battled, newest last. Each friend code works only once,
+    /// so the same code can't be re-entered to farm wins. Kept across new eggs.
+    var usedFriendCodesSaved: [String]? = nil
+    static let usedFriendCodesLimit = 100
+    var usedFriendCodes: [String] {
+        get { usedFriendCodesSaved ?? [] }
+        set { usedFriendCodesSaved = Array(newValue.suffix(Tamer.usedFriendCodesLimit)) }
+    }
+
     /// When the current egg was started. "Start new egg" unlocks again
     /// `Tuning.newEggCooldownDays` later (or right away if the dino dies).
     var lastNewEgg: Date? = nil
 
+    /// Last time the game was opened. Not opened for 14 days = the dino dies.
+    var lastOpened: Date? = nil
+
+    /// Old saves only: a dino paused in an older version resumes when this version starts.
     var pausedReason: PauseReason? = nil
-    var pauseWhenChargingSetting: Bool? = nil
-    var pauseWhenCharging: Bool {
-        get { pauseWhenChargingSetting ?? true }
-        set { pauseWhenChargingSetting = newValue }
-    }
 }
 
 // MARK: - DinoState
@@ -162,8 +185,14 @@ final class DinoState: ObservableObject {
             pet = Pet.newEgg(generation: 1, kind: EggKind.roll())
             tamer.lastNewEgg = Date()
         }
+        // Older versions could pause the game. A paused dino resumes now,
+        // and the paused time is skipped.
+        if tamer.pausedReason != nil {
+            tamer.pausedReason = nil
+            pet.lastUpdate = Date()
+        }
+        checkAbandoned()
         catchUp()
-        WKInterfaceDevice.current().isBatteryMonitoringEnabled = true
         ticker = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in self?.tick() }
@@ -174,7 +203,8 @@ final class DinoState: ObservableObject {
     // MARK: - Derived
 
     var isAsleep: Bool { pet.stage != .egg && pet.isAsleep(at: Date()) }
-    var secondsPerGameMinute: Double { 60.0 / max(tamer.speed, 1) }
+    /// The game always runs in real time: one game minute = one real minute.
+    let secondsPerGameMinute: Double = 60
 
     // MARK: - Persistence
 
@@ -197,14 +227,12 @@ final class DinoState: ObservableObject {
     private func tick() {
         catchUp()
         tickCount += 1
-        if tickCount % 10 == 0 { checkCharger() }
         if tickCount % 15 == 0 { refreshSteps() }
         if tickCount % 30 == 0 { save() }
     }
 
     /// Runs every whole game-minute that has passed since the last update.
     func catchUp() {
-        if isPaused { return }   // frozen: no time passes in daycare
         let now = Date()
         let secPerMin = secondsPerGameMinute
         let elapsed = now.timeIntervalSince(pet.lastUpdate)
@@ -262,19 +290,17 @@ final class DinoState: ObservableObject {
     func handleScenePhase(_ phase: ScenePhase) {
         switch phase {
         case .active:
-            checkCharger()
+            checkAbandoned()
             catchUp()
             refreshSteps()
-            if isAsleep && !isPaused { showToast("ZZZ... TAP 💡 TO WAKE") }
+            if isAsleep { showToast("ZZZ... TAP 💡 TO WAKE") }
         case .inactive:
             // Wrist lowered for a moment: just save.
-            checkCharger()
             catchUp()
             save()
             scheduleCareReminder()
         case .background:
             // Really left the game. During bedtime, the light goes off and the dino sleeps.
-            checkCharger()
             catchUp()
             if !pet.isDead && pet.lightsOn && pet.isBedtime(at: Date()) {
                 pet.lightsOn = false
@@ -286,52 +312,23 @@ final class DinoState: ObservableObject {
         }
     }
 
-    // MARK: - Pause (daycare) & charger
+    // MARK: - Left alone too long
 
-    var isPaused: Bool { tamer.pausedReason != nil }
-
-    var isCharging: Bool {
-        let s = WKInterfaceDevice.current().batteryState
-        return s == .charging || s == .full
-    }
-
-    /// Freeze time completely. Needs, poop, sickness and evolution all stop.
-    func pause(_ reason: PauseReason) {
-        guard !pet.isDead, !isPaused else { return }
-        if screen == .battle || screen == .trainTap { return }
-        catchUp()                       // settle everything up to this moment
-        tamer.pausedReason = reason
-        screen = .home
-        save()
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        haptic(.stop)
-        showToast(reason == .charger ? "CHARGING..." : "PAUSED")
-    }
-
-    /// Unfreeze. The paused time is skipped, as if it never happened.
-    func resume() {
-        guard isPaused else { return }
-        tamer.pausedReason = nil
-        pet.lastUpdate = Date()
-        save()
-        haptic(.start)
-        showToast("WELCOME BACK!")
-    }
-
-    /// Auto-pause while on the charger, auto-resume once unplugged.
-    func checkCharger() {
-        if isCharging {
-            if tamer.pauseWhenCharging && !isPaused { pause(.charger) }
-        } else if tamer.pausedReason == .charger {
-            resume()
+    /// Not opening the game for `Tuning.lonelyDays` days in a row = the dino dies.
+    /// Shorter breaks are safe: while the app is closed the dino waits for you.
+    func checkAbandoned() {
+        let now = Date()
+        defer {
+            tamer.lastOpened = now
+            save()
         }
-    }
-
-    func setPauseWhenCharging(_ on: Bool) {
-        tamer.pauseWhenCharging = on
-        if !on && tamer.pausedReason == .charger { resume() }
-        save()
-        checkCharger()
+        guard let last = tamer.lastOpened, !pet.isDead else { return }
+        if now.timeIntervalSince(last) >= Tuning.lonelyDays * 24 * 3600 {
+            pet.die("LONELY")
+            pet.lastUpdate = now
+            screen = .home
+            anim = .none
+        }
     }
 
     // MARK: - Helpers
@@ -352,7 +349,6 @@ final class DinoState: ObservableObject {
     /// Common checks before an action. Shows a message and returns false if not allowed.
     private func canAct(allowSick: Bool = true) -> Bool {
         if pet.isDead { return false }
-        if isPaused { showToast("PAUSED"); return false }
         if pet.stage == .egg { showToast("TAP THE EGG"); return false }
         if anim != .none { return false }
         if isAsleep { showToast("ZZZ... TAP 💡 TO WAKE"); haptic(.failure); return false }
@@ -364,7 +360,6 @@ final class DinoState: ObservableObject {
 
     func select(_ item: MenuItem) {
         guard !pet.isDead else { return }
-        if isPaused { showToast("TAP TO RESUME"); haptic(.click); return }
         if screen == .battle || screen == .trainTap { return }
         haptic(.click)
         switch item {
@@ -593,11 +588,11 @@ final class DinoState: ObservableObject {
         creditSteps(newSteps)
     }
 
-    /// Walking turns into training. Also used by the debug "+steps" button.
+    /// Walking turns into food, protein and training. Also used by the debug "+steps" button.
     func creditSteps(_ steps: Int) {
         guard steps > 0 else { return }
         tamer.lifetimeSteps += steps
-        if pet.isDead || isPaused { save(); return }
+        if pet.isDead { save(); return }
 
         if pet.stage == .egg {
             pet.eggProgress += Double(steps) / 3.0   // ~30 steps = one tap
@@ -609,19 +604,43 @@ final class DinoState: ObservableObject {
             return
         }
 
+        // Walking feeds and trains: food every 250 steps, protein every 500,
+        // a training every 1,000. Each stops while its hearts are full, and the
+        // steps toward it wait (they don't pile up) until a heart goes down.
+        tamer.foodBank += steps
+        tamer.proteinBank += steps
         tamer.stepBank += steps
-        let perRep = max(50, tamer.stepsPerRep)
-        var reps = 0
-        while tamer.stepBank >= perRep && reps < 20 {
-            tamer.stepBank -= perRep
-            reps += 1
-            pet.applyTraining(success: true, weightLoss: 1)
+        var foods = 0, proteins = 0, reps = 0
+        while tamer.foodBank >= Tuning.walkFoodSteps && pet.hunger < 4 {
+            tamer.foodBank -= Tuning.walkFoodSteps
+            pet.hunger = min(4, pet.hunger + 1)
+            pet.weight = min(99, pet.weight + 1)
+            foods += 1
         }
-        if reps == 20 { tamer.stepBank = min(tamer.stepBank, perRep - 1) }
-        if reps > 0 {
-            tamer.walkReps += reps
+        while tamer.stepBank >= Tuning.walkTrainSteps && pet.strength < 4 {
+            tamer.stepBank -= Tuning.walkTrainSteps
+            pet.applyTraining(success: true, weightLoss: 1)
+            reps += 1
+        }
+        while tamer.proteinBank >= Tuning.walkProteinSteps && pet.strength < 4 {
+            tamer.proteinBank -= Tuning.walkProteinSteps
+            pet.strength = min(4, pet.strength + 1)
+            pet.weight = min(99, pet.weight + 2)
+            proteins += 1
+        }
+        if pet.hunger >= 4 { tamer.foodBank = min(tamer.foodBank, Tuning.walkFoodSteps - 1) }
+        if pet.strength >= 4 {
+            tamer.proteinBank = min(tamer.proteinBank, Tuning.walkProteinSteps - 1)
+            tamer.stepBank = min(tamer.stepBank, Tuning.walkTrainSteps - 1)
+        }
+        tamer.walkReps += reps
+        if foods + proteins + reps > 0 {
             haptic(.success)
-            showToast(reps == 1 ? "WALK TRAINING!" : "WALK x\(reps)!")
+            var parts: [String] = []
+            if foods > 0 { parts.append("FOOD+\(foods)") }
+            if proteins > 0 { parts.append("PROTEIN+\(proteins)") }
+            if reps > 0 { parts.append("TRAIN+\(reps)") }
+            showToast("WALK " + parts.joined(separator: " "))
             if screen == .home && anim == .none {
                 anim = .walkRep
                 Task {
@@ -692,7 +711,17 @@ final class DinoState: ObservableObject {
             haptic(.failure)
             return
         }
+        // Each friend code works only once (compared in its clean "ABC-123" form).
+        if tamer.usedFriendCodes.contains(theirs.text) {
+            showToast("ALREADY BATTLED")
+            haptic(.failure)
+            return
+        }
         guard battleReady() else { screen = .home; return }
+        // Remember it right away, so quitting mid-fight doesn't allow a redo.
+        tamer.usedFriendCodes.append(theirs.text)
+        tamer.lastBattleCode = mine.text
+        save()
         isFriendBattle = true
         screen = .battle
         let plan = BattleCode.duel(mine: mine, theirs: theirs)
@@ -837,15 +866,6 @@ final class DinoState: ObservableObject {
         save()
     }
 
-    // MARK: - Settings helpers
-
-    func setSpeed(_ speed: Double) {
-        catchUp()                 // settle time at the old speed first
-        tamer.speed = speed
-        pet.lastUpdate = Date()
-        save()
-    }
-
     // MARK: - Debug / testing (compiled only into Debug builds)
 
     #if DEBUG
@@ -876,6 +896,12 @@ final class DinoState: ObservableObject {
 
     func debugEgg(_ kind: EggKind) {
         layEgg(kind)
+    }
+
+    /// Pretend the game wasn't opened for 14 days (to test the lonely rule).
+    func debugLonely() {
+        tamer.lastOpened = Date().addingTimeInterval(-Tuning.lonelyDays * 24 * 3600 - 60)
+        checkAbandoned()
     }
 
     func debugSick() {
@@ -911,7 +937,20 @@ final class DinoState: ObservableObject {
     func scheduleCareReminder() {
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
-        guard tamer.notifications, !pet.isDead, !isPaused, pet.stage != .egg else { return }
+        guard tamer.notifications, !pet.isDead, pet.stage != .egg else { return }
+
+        // Warn before the 14-day "left alone" rule: 2 days and 1 day before.
+        let lonelyAt = Date().addingTimeInterval(Tuning.lonelyDays * 24 * 3600)
+        for (id, daysBefore, text) in [("lonely-2", 2.0, "misses you! Open WatchTamer in the next 2 days, or it will be gone forever."),
+                                       ("lonely-1", 1.0, "is so lonely… Open WatchTamer today, or it will be gone forever!")] {
+            let date = lonelyAt.addingTimeInterval(-daysBefore * 24 * 3600)
+            let content = UNMutableNotificationContent()
+            content.title = "WatchTamer"
+            content.body = "🥺 Your \(pet.formName) \(text)"
+            content.sound = .default
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(60, date.timeIntervalSinceNow), repeats: false)
+            center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger), withCompletionHandler: nil)
+        }
 
         var p = pet
         let name = p.formName

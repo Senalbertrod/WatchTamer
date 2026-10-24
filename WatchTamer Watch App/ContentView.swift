@@ -28,7 +28,7 @@ struct ContentView: View {
 
     private let stepTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
-    private var pal: LCDPalette { LCDPalette.current(night: state.tamer.nightScreen) }
+    private var pal: LCDPalette { .classic }
     private var pet: Pet { state.pet }
 
     var body: some View {
@@ -129,11 +129,6 @@ struct ContentView: View {
                     pal.dot
                 }
 
-                // Paused (daycare or charging): everything is frozen
-                if state.isPaused {
-                    pausedScreen(dot: dot)
-                }
-
                 if let toast = state.toast {
                     VStack {
                         Text(toast)
@@ -151,19 +146,11 @@ struct ContentView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .overlay(RoundedRectangle(cornerRadius: 8).stroke(pal.bezel, lineWidth: 2))
             .contentShape(Rectangle())
-            .onLongPressGesture(minimumDuration: 1.0) {
-                // Hold the screen for 1 second to pause (daycare)
-                if state.screen == .home && !state.isPaused { state.pause(.daycare) }
-            }
             .onTapGesture { lcdTapped() }
         }
     }
 
     private func lcdTapped() {
-        if state.isPaused {
-            state.resume()
-            return
-        }
         switch state.screen {
         case .home:
             if pet.stage == .egg { state.tapEgg() }
@@ -218,28 +205,6 @@ struct ContentView: View {
             .foregroundColor(pal.dot)
             .lineLimit(1)
             .minimumScaleFactor(0.6)
-    }
-
-    // MARK: - Paused
-
-    private func pausedScreen(dot: CGFloat) -> some View {
-        let charging = state.tamer.pausedReason == .charger
-        return ZStack {
-            pal.screen
-            LCDGrid(dot: dot, color: pal.ghost)
-            VStack(spacing: 3) {
-                HStack(spacing: 4) {
-                    let pausedRows = DinoSprite.rows(pet.spriteKey, frame: 0)
-                    PixelSprite(rows: pausedRows, dot: fitDot(pausedRows, dot: dot, cols: 18, rows: 8), color: pal.dot)
-                    PixelSprite(rows: PixelArt.zzz, dot: max(1.5, dot * 0.6), color: pal.dot)
-                }
-                lcdText(charging ? "CHARGING" : "DAYCARE", 12)
-                lcdText("TIME IS PAUSED", 9)
-                lcdText(charging ? "UNPLUG OR TAP TO PLAY" : "TAP TO RESUME", 8)
-                    .opacity(blink ? 1 : 0.5)
-            }
-            .padding(4)
-        }
     }
 
     // MARK: - Home scene
@@ -396,8 +361,8 @@ struct ContentView: View {
                 lcdText("TRAINED \(pet.trainings)x", 9)
             case 4:
                 lcdText("BATTLES", 11)
-                lcdText("WIN \(pet.wins)/\(pet.battles)  \(Int(pet.winRate * 100))%", 9)
-                lcdText("ALL \(pet.totalWins)/\(pet.totalBattles)", 9)
+                lcdText("THIS STAGE  W\(pet.wins) L\(pet.battles - pet.wins)  \(Int(pet.winRate * 100))%", 9)
+                lcdText("ALL TIME  W\(pet.totalWins) L\(pet.totalBattles - pet.totalWins)", 9)
             default:
                 lcdText("CARE", 11)
                 lcdText("MISTAKES \(pet.careMistakes)", 9)
@@ -465,6 +430,9 @@ struct ContentView: View {
             Text(state.tamer.myBattleCode ?? "------")
                 .font(.system(size: 18, weight: .heavy, design: .monospaced))
                 .foregroundColor(pal.dot)
+            if let last = state.tamer.lastBattleCode {
+                lcdText("LAST CODE \(last)", 8)
+            }
             lcdText("TAP TO ENTER", 10)
                 .opacity(blink ? 1 : 0.4)
             lcdText("FRIEND'S CODE", 10)
@@ -486,7 +454,12 @@ struct ContentView: View {
                     .textInputAutocapitalization(.characters)
                     .autocorrectionDisabled()
                     .font(.system(size: 16, weight: .bold, design: .monospaced))
-                    .onSubmit { submitFriendCode() }
+                    // "Done" only closes the keyboard; the fight starts with ⚡ BATTLE!
+                    // so you can show your code to your friend first.
+                    .onSubmit {
+                        let typed = friendCodeInput.filter { $0.isLetter || $0.isNumber }
+                        codeError = !typed.isEmpty && BattleCode.decode(friendCodeInput) == nil
+                    }
 
                 if codeError {
                     Text("BAD CODE. CHECK IT AND TRY AGAIN.")
@@ -513,6 +486,11 @@ struct ContentView: View {
                 Text(state.tamer.myBattleCode ?? "------")
                     .font(.system(size: 20, weight: .heavy, design: .monospaced))
                     .foregroundColor(.green)
+                if let last = state.tamer.lastBattleCode {
+                    Text("LAST CODE \(last)")
+                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                        .foregroundColor(.secondary)
+                }
                 Button("NEW CODE") { state.newBattleCode() }
                     .font(.system(size: 12, weight: .bold, design: .monospaced))
             }
@@ -576,13 +554,12 @@ struct ContentView: View {
 
     private func walkScene(dot: CGFloat) -> some View {
         let t = state.tamer
-        let per = max(50, t.stepsPerRep)
-        return VStack(spacing: 3) {
+        return VStack(spacing: 2) {
             HStack(spacing: 4) {
                 Image(systemName: "figure.walk")
                     .font(.system(size: 16, weight: .bold))
                     .foregroundColor(pal.dot)
-                lcdText("WALK TRAINING", 10)
+                lcdText("WALKING", 10)
             }
             if !CMPedometer.isStepCountingAvailable() {
                 lcdText("NO STEP SENSOR", 9)
@@ -591,15 +568,23 @@ struct ContentView: View {
                 lcdText("TURNED OFF", 9)
                 lcdText("SWIPE → SETTINGS", 8)
             } else {
-                lcdText("\(t.stepBank)/\(per) STEPS", 10)
-                LCDBar(progress: Double(t.stepBank) / Double(per), color: pal.dot, height: 7)
-                    .padding(.horizontal, 6)
-                lcdText("REPS \(t.walkReps)  TRAINED \(pet.trainings)", 8)
+                walkRow("FOOD", t.foodBank, Tuning.walkFoodSteps, full: pet.hunger >= 4)
+                walkRow("PROTEIN", t.proteinBank, Tuning.walkProteinSteps, full: pet.strength >= 4)
+                walkRow("TRAIN", t.stepBank, Tuning.walkTrainSteps, full: pet.strength >= 4)
                 lcdText("JUST WALK - IT COUNTS!", 7)
                     .opacity(0.7)
             }
         }
         .padding(4)
+    }
+
+    /// One line on the walk screen: steps toward the next food / protein / training.
+    private func walkRow(_ label: String, _ steps: Int, _ per: Int, full: Bool) -> some View {
+        VStack(spacing: 1) {
+            lcdText(full ? "\(label)  FULL" : "\(label)  \(steps)/\(per)", 8)
+            LCDBar(progress: full ? 1 : Double(steps) / Double(per), color: pal.dot, height: 4)
+                .padding(.horizontal, 6)
+        }
     }
 
     // MARK: - Battle

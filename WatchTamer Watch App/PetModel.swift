@@ -108,9 +108,15 @@ enum DinoSpecies: String, Codable, CaseIterable {
     static let rareUltimates: [DinoSpecies] = [.styracosaurus, .spinosaurus, .ankylosaurus, .brachiosaurus]
 }
 
-// MARK: - Tuning (all times are GAME minutes; game speed multiplies real time)
+// MARK: - Tuning (all times are game minutes; the game always runs in real time)
 
 enum Tuning {
+    // Walking: every this many steps gives food, protein or a training.
+    // Each one stops while its hearts are full (day or night).
+    static let walkFoodSteps = 250
+    static let walkProteinSteps = 500
+    static let walkTrainSteps = 1000
+
     /// How long each stage lasts before it evolves.
     static func stageDuration(_ s: DinoStage) -> Double {
         switch s {
@@ -200,6 +206,8 @@ enum Tuning {
     /// Safety net: if a deadly problem builds up while the app is closed, the dino
     /// survives and you get at least this many game minutes after you come back.
     static let comebackGrace: Double = 60
+    /// Not opening the game this many days in a row = the dino dies of loneliness.
+    static let lonelyDays: Double = 14
 }
 
 // MARK: - Events the simulation reports back
