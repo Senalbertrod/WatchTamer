@@ -34,7 +34,7 @@ Builds run from Xcode include a **Testing** section in Settings (skip time, add 
 | 🏋️ **Train** | **TAP**: mash the screen for 5 seconds to fill the meter. **WALK**: just walk, even while the app is closed (see Walking below) |
 | ⚡ **Battle** | **CPU**: fight a computer rival. **FRIEND**: swap battle codes (see below). First to 3 hits wins. Rookie and up |
 | 🌊 **Flush** | Clean up poop. 8 piles = your dino gets sick |
-| 💡 **Lights** | Bedtime starts at 8–10pm (by stage). **Light off** = your dino sleeps and its needs pause. **Light on** = it wakes up, so you can feed, train, battle, clean and heal any time of day or night. Leave the game during bedtime and the light switches off by itself. |
+| 💡 **Lights** | Bedtime starts at 8–10pm (by stage), on your watch's local time, so it follows you when you travel. At bedtime the light switches off by itself, even with the game open, and your dino sleeps (its needs pause). **Light on** = it wakes up, so you can feed, train, battle, clean and heal any time of day or night. Leave the game during bedtime and the light switches off again. |
 | ➕ **Medicine** | Cure sickness and battle injuries (skull icon) |
 | ⚠️ **Call** | Blinks when your dino needs you. Ignore it for 10 minutes = 1 care mistake |
 

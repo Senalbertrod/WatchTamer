@@ -353,7 +353,7 @@ struct Pet: Codable, Equatable {
     /// Real-clock bedtime for this stage (e.g. 8pm-8am). Baby I has none.
     func isBedtime(at date: Date) -> Bool {
         guard !isDead, let hours = Tuning.sleepHours(stage) else { return false }
-        let hour = Calendar.current.component(.hour, from: date)
+        let hour = Calendar.autoupdatingCurrent.component(.hour, from: date)   // follows time zone changes (travel)
         return hour >= hours.sleep || hour < hours.wake
     }
 
@@ -398,12 +398,14 @@ struct Pet: Codable, Equatable {
             }
         }
 
-        // Bedtime hours come from the real clock, but the LIGHT decides:
-        // light on = awake (you can play any time), light off at bedtime = asleep.
+        // Bedtime hours come from the real clock (in the watch's current time zone).
+        // When bedtime starts, the light turns off and the dino falls asleep.
+        // Tap the light back on to wake it and keep playing.
         let bedtime = isBedtime(at: date)
         if bedtime != wasAsleep {            // `wasAsleep` remembers "was it bedtime"
             wasAsleep = bedtime
             if bedtime {
+                lightsOn = false               // bedtime: the light turns itself off, even with the game open
                 events.append(.fellAsleep)
             } else {
                 lightsOn = true                // morning: lights come back on

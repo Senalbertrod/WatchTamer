@@ -55,7 +55,7 @@ struct SettingsView: View {
                     • Train by tapping fast, or just walk: food every 250 steps, protein every 500, training every 1,000.
                     • FLUSH poop. Skull = give MEDICINE.
                     • ! means your dino needs you.
-                    • Bedtime 8-10pm: light off to sleep.
+                    • Bedtime 8-10pm: the light turns off by itself. Tap 💡 to wake your dino and keep playing.
                     • Each battle uses 1 strength heart.
                     • Friend battle: swap codes (Done just closes the keyboard), both tap BATTLE. If your friend battled first, type their LAST CODE. Each code works only once.
                     • Good care, training and wins = the best dinos.

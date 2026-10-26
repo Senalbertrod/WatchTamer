@@ -290,6 +290,7 @@ final class DinoState: ObservableObject {
     func handleScenePhase(_ phase: ScenePhase) {
         switch phase {
         case .active:
+            NSTimeZone.resetSystemTimeZone()   // pick up a new time zone after travel
             checkAbandoned()
             catchUp()
             refreshSteps()
