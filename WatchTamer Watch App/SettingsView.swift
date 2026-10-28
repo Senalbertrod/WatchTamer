@@ -51,16 +51,13 @@ struct SettingsView: View {
 
             Section("HOW TO PLAY") {
                 Text("""
-                    • MEAT fills hunger, PROTEIN fills strength.
-                    • Train by tapping fast, or just walk: food every 250 steps, protein every 500, training every 1,000.
-                    • FLUSH poop. Skull = give MEDICINE.
-                    • ! means your dino needs you.
-                    • Bedtime 8-10pm: the light turns off by itself. Tap 💡 to wake your dino and keep playing.
-                    • Each battle uses 1 strength heart.
-                    • Friend battle: swap codes (Done just closes the keyboard), both tap BATTLE. If your friend battled first, type their LAST CODE. Each code works only once.
-                    • Good care, training and wins = the best dinos.
-                    • Eggs: striped RARE (10%) becomes a stronger Ultimate. SPIKY (2%) is the only way to get a T-Rex or Raptor.
-                    • Runs in real time. Don't leave it alone for 2 weeks.
+                    • MEAT = hunger. PROTEIN = strength.
+                    • Train by tapping fast or walking.
+                    • FLUSH poop. Skull = MEDICINE.
+                    • ! = your dino needs you.
+                    • Each battle uses 1 heart. Friends swap codes, then both tap BATTLE.
+                    • Rare eggs make stronger dinos.
+                    • Don't leave it alone for 2 weeks.
                     """)
                     .font(.system(size: 12))
             }
