@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "2700"
-   version = "1.7">
+   version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -13,7 +13,11 @@
             buildForArchiving = "YES"
             buildForAnalyzing = "YES">
             <BuildableReference
-               BuildableIdentifier = "primary" BlueprintIdentifier = "9AF885BFF009E59DA00CB084" BuildableName = "WatchTamer.app" BlueprintName = "WatchTamer" ReferencedContainer = "container:WatchTamer.xcodeproj">
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9AF885BFF009E59DA00CB084"
+               BuildableName = "WatchTamer.app"
+               BlueprintName = "WatchTamer"
+               ReferencedContainer = "container:WatchTamer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -23,6 +27,8 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -37,7 +43,10 @@
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
-            BuildableIdentifier = "primary" BlueprintIdentifier = "125369E22F9ABAD7002CA3AB" BuildableName = "WatchTamer Watch App.app" BlueprintName = "WatchTamer Watch App" ReferencedContainer = "container:WatchTamer.xcodeproj">
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "125369E22F9ABAD7002CA3AB"
+            BuildableName = "WatchTamer Watch App.app"
+            ReferencedContainer = "container:WatchTamer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -47,6 +56,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "9AF885BFF009E59DA00CB084"
+            BuildableName = "WatchTamer.app"
+            BlueprintName = "WatchTamer"
+            ReferencedContainer = "container:WatchTamer.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
