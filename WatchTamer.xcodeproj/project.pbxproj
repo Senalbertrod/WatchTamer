@@ -6,8 +6,37 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3B0C501A42F7D13FE7AC15D0 /* WatchTamer Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 125369E32F9ABAD7002CA3AB /* WatchTamer Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4854C1634C4F0D23BE80E700 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 125369D72F9ABAD7002CA3AB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 125369E22F9ABAD7002CA3AB;
+			remoteInfo = "WatchTamer Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9C1DCAE86A40BB6DB1CC96CD /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				3B0C501A42F7D13FE7AC15D0 /* WatchTamer Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		125369E32F9ABAD7002CA3AB /* WatchTamer Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WatchTamer Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAC2C6C77AB447397EE38B1D /* WatchTamer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WatchTamer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,6 +69,7 @@
 		125369DE2F9ABAD7002CA3AB /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				AAC2C6C77AB447397EE38B1D /* WatchTamer.app */,
 				125369E32F9ABAD7002CA3AB /* WatchTamer Watch App.app */,
 			);
 			name = Products;
@@ -70,6 +100,25 @@
 			productReference = 125369E32F9ABAD7002CA3AB /* WatchTamer Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
+		9AF885BFF009E59DA00CB084 /* WatchTamer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A49728632358B58A926DCC4D /* Build configuration list for PBXNativeTarget "WatchTamer" */;
+			buildPhases = (
+				F677BD5DA87D822723DDE14D /* Resources */,
+				9C1DCAE86A40BB6DB1CC96CD /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				10D692431ED435D46C8E090C /* PBXTargetDependency */,
+			);
+			name = WatchTamer;
+			packageProductDependencies = (
+			);
+			productName = WatchTamer;
+			productReference = AAC2C6C77AB447397EE38B1D /* WatchTamer.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -80,6 +129,9 @@
 				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 2700;
 				TargetAttributes = {
+					9AF885BFF009E59DA00CB084 = {
+						CreatedOnToolsVersion = 26.4.1;
+					};
 					125369E22F9ABAD7002CA3AB = {
 						CreatedOnToolsVersion = 26.4.1;
 					};
@@ -99,6 +151,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				9AF885BFF009E59DA00CB084 /* WatchTamer */,
 				125369E22F9ABAD7002CA3AB /* WatchTamer Watch App */,
 			);
 		};
@@ -106,6 +159,13 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		125369E12F9ABAD7002CA3AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F677BD5DA87D822723DDE14D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -123,6 +183,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		10D692431ED435D46C8E090C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 125369E22F9ABAD7002CA3AB /* WatchTamer Watch App */;
+			targetProxy = 4854C1634C4F0D23BE80E700 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		125369EE2F9ABAD8002CA3AB /* Debug */ = {
@@ -268,7 +336,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.senalbert.WatchTamer.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
-				SKIP_INSTALL = NO;
+				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -303,7 +371,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.senalbert.WatchTamer.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
-				SKIP_INSTALL = NO;
+				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -313,6 +381,45 @@
 				TARGETED_DEVICE_FAMILY = 4;
 				VALIDATE_PRODUCT = YES;
 				WATCHOS_DEPLOYMENT_TARGET = 26.4;
+			};
+			name = Release;
+		};
+		6F19443311F34AC3542C5BF3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8W85QPUG6S;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchTamer;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.senalbert.WatchTamer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A035B16F377133FF79AFC96E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8W85QPUG6S;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchTamer;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.senalbert.WatchTamer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -333,6 +440,15 @@
 			buildConfigurations = (
 				125369F12F9ABAD8002CA3AB /* Debug */,
 				125369F22F9ABAD8002CA3AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A49728632358B58A926DCC4D /* Build configuration list for PBXNativeTarget "WatchTamer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F19443311F34AC3542C5BF3 /* Debug */,
+				A035B16F377133FF79AFC96E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
