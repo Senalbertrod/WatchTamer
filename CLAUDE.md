@@ -15,6 +15,7 @@ A 90s-style virtual pet (dinosaur) for Apple Watch. SwiftUI watchOS app, `WatchT
 - 1.0 is the first release, then 1.1, 1.2, and so on.
 - Every update gets a "What's New" list (the README's Versions section).
 - The build number goes up by 1 on every upload.
+- Every update: change the version and build number on both the iPhone wrapper target "WatchTamer" and the "WatchTamer Watch App" target, so they match. Archive with the "WatchTamer" scheme.
 
 ## Senalbert's projects
 

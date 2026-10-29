@@ -123,6 +123,7 @@ WatchTamer has no accounts, ads, analytics or network code. Your dino, your sett
 - 1.0 is the first App Store release. After that, go up one step at a time: 1.1, 1.2, 1.3…
 - Every update gets a short, plain-English "What's New in This Version" list in App Store Connect, and the same list is added below.
 - The build number goes up by 1 on every upload, even when the version stays the same (for example, after a rejection).
+- **Update the wrapper too.** The app has two parts in Xcode: the iPhone wrapper ("WatchTamer") and the Apple Watch app ("WatchTamer Watch App"). Every update, change the version and build number on **both**, so they match. Then archive with the "WatchTamer" scheme (Product → Archive) and upload.
 
 | Version | What's new |
 | --- | --- |
