@@ -17,6 +17,13 @@ A 90s-style virtual pet (dinosaur) for Apple Watch. SwiftUI watchOS app, `WatchT
 - The build number goes up by 1 on every upload.
 - Every update: change the version and build number on the iPhone wrapper target "WatchTamer", the "WatchTamer Watch App" target and the "WatchTamerWidgets" complication, so all three match. Archive with the "WatchTamer" scheme.
 
+## Friend battles must keep working between versions
+
+- Players on different versions (1.0, 1.1 and later) must always be able to battle each other and see the same result.
+- Never change BattleCode.swift, the order of the dino species, or anything that decides a friend battle (the code format, the dice, who shoots first, strength, effort, trainings, rare prize) without telling me first and explaining in plain English how older versions would be affected.
+- If a future change to battles is really needed, add a version marker to the codes first, so an older watch can say "Update WatchTamer to battle this friend" instead of showing a different result.
+- Before every update, test that a battle code made by the previous version and one made by the new version give the same fight on both.
+
 ## Senalbert's projects
 
 - App Store apps (release around November 1): WatchTamer, LCD Date, PM & DST, Make Forever QR Codes.
