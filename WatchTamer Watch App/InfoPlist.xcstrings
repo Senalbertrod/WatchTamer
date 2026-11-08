@@ -5,16 +5,48 @@
       "comment" : "App name on the Apple Watch",
       "extractionState" : "extracted_with_value",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "new", "value" : "WatchTamer" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "WatchTamer" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "WatchTamer"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WatchTamer"
+          }
+        }
+      }
+    },
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "WatchTamer Watch App"
+          }
+        }
       }
     },
     "NSMotionUsageDescription" : {
       "comment" : "Why the game asks for step counting",
       "extractionState" : "extracted_with_value",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "new", "value" : "WatchTamer counts your steps so walking trains your dinosaur." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "WatchTamer cuenta tus pasos para que caminar entrene a tu dinosaurio." } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "WatchTamer counts your steps so walking trains your dinosaur."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WatchTamer cuenta tus pasos para que caminar entrene a tu dinosaurio."
+          }
+        }
       }
     }
   },

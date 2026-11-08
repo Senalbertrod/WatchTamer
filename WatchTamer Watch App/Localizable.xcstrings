@@ -11,6 +11,16 @@
         }
       }
     },
+    "%@ · AGE %lldd" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · EDAD %lldd"
+          }
+        }
+      }
+    },
     "%@ %@" : {
       "localizations" : {
         "es" : {
@@ -27,16 +37,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ QEPD"
-          }
-        }
-      }
-    },
-    "%@ · AGE %lldd" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · EDAD %lldd"
           }
         }
       }
@@ -77,6 +77,106 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "• MEAT = hunger. PROTEIN = strength.\n• Train by tapping fast or walking.\n• 5,000 steps a day = 1 training RESERVE (up to 4).\n• FLUSH poop. Skull = MEDICINE.\n• ! = your dino needs you.\n• Each battle uses 1 heart. Friends swap codes, then both tap BATTLE.\n• Rare eggs make stronger dinos.\n• Don't leave it alone for 2 weeks." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• CARNE = hambre. PROTEÍNA = fuerza.\n• Entrena tocando rápido o caminando.\n• 5,000 pasos al día = 1 RESERVA de entreno (hasta 4).\n• LIMPIA la caca. Calavera = MEDICINA.\n• ! = tu dino te necesita.\n• Cada batalla usa 1 corazón. Los amigos intercambian códigos y ambos tocan BATALLA.\n• Los huevos raros dan dinos más fuertes.\n• No lo dejes solo por 2 semanas."
+          }
+        }
+      }
+    },
+    "⚡ BATTLE!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚡ ¡BATALLA!"
+          }
+        }
+      }
+    },
+    "🍖 Your %@ is hungry! Feed it within 10 minutes." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🍖 ¡Tu %@ tiene hambre! Dale de comer en 10 minutos."
+          }
+        }
+      }
+    },
+    "💀 Your %@ is sick! Give it medicine." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💀 ¡Tu %@ está enfermo! Dale medicina."
+          }
+        }
+      }
+    },
+    "💩 %lld poops piling up. Flush them!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💩 Se acumulan %lld cacas. ¡Límpialas!"
+          }
+        }
+      }
+    },
+    "💩 %lld poops! Flush now or your %@ will get sick!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💩 ¡%lld cacas! Límpialas ya o tu %@ se enfermará."
+          }
+        }
+      }
+    },
+    "💩 Your %@ pooped! Time to flush." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💩 ¡Tu %@ hizo caca! Hora de limpiar."
+          }
+        }
+      }
+    },
+    "💪 Your %@ is weak! Give it protein or train it." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💪 ¡Tu %@ está débil! Dale proteína o entrénalo."
+          }
+        }
+      }
+    },
+    "🥺 Your %@ is so lonely… Open WatchTamer today, or it will be gone forever!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🥺 Tu %@ se siente muy solo… ¡Abre WatchTamer hoy o se irá para siempre!"
+          }
+        }
+      }
+    },
+    "🥺 Your %@ misses you! Open WatchTamer in the next 2 days, or it will be gone forever." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🥺 ¡Tu %@ te extraña! Abre WatchTamer en los próximos 2 días o se irá para siempre."
           }
         }
       }
@@ -141,15 +241,6 @@
         }
       }
     },
-    "Add 250 steps" : {
-      "shouldTranslate" : false
-    },
-    "Add 5,000 steps" : {
-      "shouldTranslate" : false
-    },
-    "Away 14 days" : {
-      "shouldTranslate" : false
-    },
     "BABY I" : {
       "localizations" : {
         "es" : {
@@ -210,12 +301,32 @@
         }
       }
     },
+    "Cancel" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        }
+      }
+    },
     "CARE" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "CUIDADO"
+          }
+        }
+      }
+    },
+    "Care reminders" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avisos"
           }
         }
       }
@@ -236,26 +347,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "CPU"
-          }
-        }
-      }
-    },
-    "Cancel" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancelar"
-          }
-        }
-      }
-    },
-    "Care reminders" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Avisos"
           }
         }
       }
@@ -290,8 +381,25 @@
         }
       }
     },
-    "Evolve now" : {
-      "shouldTranslate" : false
+    "every %lld steps" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cada %lld pasos"
+          }
+        }
+      }
+    },
+    "every %lld steps a day, up to %lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cada %lld pasos al día, hasta %lld"
+          }
+        }
+      }
     },
     "FEED IT" : {
       "localizations" : {
@@ -304,6 +412,7 @@
       }
     },
     "FINAL FORM" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -329,6 +438,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¡LIMPIA!"
+          }
+        }
+      }
+    },
+    "Food" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comida"
           }
         }
       }
@@ -363,16 +482,6 @@
         }
       }
     },
-    "FRIEND'S CODE" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CÓDIGO AMIGO"
-          }
-        }
-      }
-    },
     "FRIEND: %@" : {
       "localizations" : {
         "es" : {
@@ -383,22 +492,22 @@
         }
       }
     },
+    "FRIEND'S CODE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CÓDIGO AMIGO"
+          }
+        }
+      }
+    },
     "FULL!" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "¡LLENO!"
-          }
-        }
-      }
-    },
-    "Food" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comida"
           }
         }
       }
@@ -523,6 +632,16 @@
         }
       }
     },
+    "Hungry" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hambre"
+          }
+        }
+      }
+    },
     "HUNGRY" : {
       "localizations" : {
         "es" : {
@@ -539,16 +658,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "¡HAMBRE!"
-          }
-        }
-      }
-    },
-    "Hungry" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hambre"
           }
         }
       }
@@ -593,6 +702,16 @@
         }
       }
     },
+    "Lifetime steps" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasos en total"
+          }
+        }
+      }
+    },
     "LINKING..." : {
       "localizations" : {
         "es" : {
@@ -609,22 +728,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "SOLEDAD"
-          }
-        }
-      }
-    },
-    "Lay rare egg" : {
-      "shouldTranslate" : false
-    },
-    "Lay spiky egg" : {
-      "shouldTranslate" : false
-    },
-    "Lifetime steps" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pasos en total"
           }
         }
       }
@@ -659,9 +762,6 @@
         }
       }
     },
-    "Make sick" : {
-      "shouldTranslate" : false
-    },
     "NEW CODE" : {
       "localizations" : {
         "es" : {
@@ -672,12 +772,32 @@
         }
       }
     },
+    "New egg" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huevo nuevo"
+          }
+        }
+      }
+    },
     "NEW EGG" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "HUEVO NUEVO"
+          }
+        }
+      }
+    },
+    "New egg in" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huevo nuevo en"
           }
         }
       }
@@ -722,26 +842,6 @@
         }
       }
     },
-    "New egg" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Huevo nuevo"
-          }
-        }
-      }
-    },
-    "New egg in" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Huevo nuevo en"
-          }
-        }
-      }
-    },
     "OK" : {
       "localizations" : {
         "es" : {
@@ -758,6 +858,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ABRE EL JUEGO"
+          }
+        }
+      }
+    },
+    "Poop" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caca"
+          }
+        }
+      }
+    },
+    "Protein" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proteína"
           }
         }
       }
@@ -788,26 +908,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "PROTEÍNA+%lld"
-          }
-        }
-      }
-    },
-    "Poop" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Caca"
-          }
-        }
-      }
-    },
-    "Protein" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Proteína"
           }
         }
       }
@@ -872,6 +972,16 @@
         }
       }
     },
+    "Reserves saved" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reservas guardadas"
+          }
+        }
+      }
+    },
     "RIP" : {
       "localizations" : {
         "es" : {
@@ -912,12 +1022,22 @@
         }
       }
     },
-    "Reserves saved" : {
+    "Shows what your dino needs most, or your dino when all is well." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reservas guardadas"
+            "value" : "Muestra lo que más necesita tu dino, o a tu dino cuando todo está bien."
+          }
+        }
+      }
+    },
+    "Sick" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enfermo"
           }
         }
       }
@@ -982,6 +1102,26 @@
         }
       }
     },
+    "Start new egg" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar huevo nuevo"
+          }
+        }
+      }
+    },
+    "Start over with a new egg?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Empezar de nuevo con otro huevo?"
+          }
+        }
+      }
+    },
     "STEPS %lld" : {
       "localizations" : {
         "es" : {
@@ -1012,55 +1152,22 @@
         }
       }
     },
-    "Shows what your dino needs most, or your dino when all is well." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Muestra lo que más necesita tu dino, o a tu dino cuando todo está bien."
-          }
-        }
-      }
-    },
-    "Sick" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enfermo"
-          }
-        }
-      }
-    },
-    "Skip 1 hour" : {
-      "shouldTranslate" : false
-    },
-    "Start new egg" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Empezar huevo nuevo"
-          }
-        }
-      }
-    },
-    "Start over with a new egg?" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Empezar de nuevo con otro huevo?"
-          }
-        }
-      }
-    },
     "TAP" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "TOCA"
+          }
+        }
+      }
+    },
+    "TAP ▶ %lld/6" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TOCA ▶ %lld/6"
           }
         }
       }
@@ -1114,19 +1221,6 @@
           }
         }
       }
-    },
-    "TAP ▶ %lld/6" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "TOCA ▶ %lld/6"
-          }
-        }
-      }
-    },
-    "TESTING" : {
-      "shouldTranslate" : false
     },
     "THAT'S YOU!" : {
       "localizations" : {
@@ -1218,16 +1312,6 @@
         }
       }
     },
-    "TURNED OFF" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "APAGADO"
-          }
-        }
-      }
-    },
     "Training" : {
       "localizations" : {
         "es" : {
@@ -1244,6 +1328,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reserva de entreno"
+          }
+        }
+      }
+    },
+    "TURNED OFF" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APAGADO"
           }
         }
       }
@@ -1288,12 +1382,42 @@
         }
       }
     },
+    "Walk trainings" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrenos caminando"
+          }
+        }
+      }
+    },
     "WALKING" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "CAMINAR"
+          }
+        }
+      }
+    },
+    "Walking feeds and trains dino" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caminar alimenta y entrena al dino"
+          }
+        }
+      }
+    },
+    "WatchTamer" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WatchTamer"
           }
         }
       }
@@ -1348,32 +1472,12 @@
         }
       }
     },
-    "Walk trainings" : {
+    "You can start a new egg once every 2 weeks, or right away if your dino dies." : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Entrenos caminando"
-          }
-        }
-      }
-    },
-    "Walking feeds and trains dino" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Caminar alimenta y entrena al dino"
-          }
-        }
-      }
-    },
-    "WatchTamer" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "WatchTamer"
+            "value" : "Puedes empezar un huevo nuevo una vez cada 2 semanas, o enseguida si tu dino muere."
           }
         }
       }
@@ -1408,16 +1512,6 @@
         }
       }
     },
-    "You can start a new egg once every 2 weeks, or right away if your dino dies." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Puedes empezar un huevo nuevo una vez cada 2 semanas, o enseguida si tu dino muere."
-          }
-        }
-      }
-    },
     "ZZZ" : {
       "localizations" : {
         "es" : {
@@ -1434,126 +1528,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ZZZ... TOCA 💡 PARA DESPERTAR"
-          }
-        }
-      }
-    },
-    "every %lld steps" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "cada %lld pasos"
-          }
-        }
-      }
-    },
-    "every %lld steps a day, up to %lld" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "cada %lld pasos al día, hasta %lld"
-          }
-        }
-      }
-    },
-    "• MEAT = hunger. PROTEIN = strength.\n• Train by tapping fast or walking.\n• 5,000 steps a day = 1 training RESERVE (up to 4).\n• FLUSH poop. Skull = MEDICINE.\n• ! = your dino needs you.\n• Each battle uses 1 heart. Friends swap codes, then both tap BATTLE.\n• Rare eggs make stronger dinos.\n• Don't leave it alone for 2 weeks." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• CARNE = hambre. PROTEÍNA = fuerza.\n• Entrena tocando rápido o caminando.\n• 5,000 pasos al día = 1 RESERVA de entreno (hasta 4).\n• LIMPIA la caca. Calavera = MEDICINA.\n• ! = tu dino te necesita.\n• Cada batalla usa 1 corazón. Los amigos intercambian códigos y ambos tocan BATALLA.\n• Los huevos raros dan dinos más fuertes.\n• No lo dejes solo por 2 semanas."
-          }
-        }
-      }
-    },
-    "⚡ BATTLE!" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "⚡ ¡BATALLA!"
-          }
-        }
-      }
-    },
-    "🍖 Your %@ is hungry! Feed it within 10 minutes." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "🍖 ¡Tu %@ tiene hambre! Dale de comer en 10 minutos."
-          }
-        }
-      }
-    },
-    "💀 Your %@ is sick! Give it medicine." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "💀 ¡Tu %@ está enfermo! Dale medicina."
-          }
-        }
-      }
-    },
-    "💩 %lld poops piling up. Flush them!" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "💩 Se acumulan %lld cacas. ¡Límpialas!"
-          }
-        }
-      }
-    },
-    "💩 %lld poops! Flush now or your %@ will get sick!" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "💩 ¡%lld cacas! Límpialas ya o tu %@ se enfermará."
-          }
-        }
-      }
-    },
-    "💩 Your %@ pooped! Time to flush." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "💩 ¡Tu %@ hizo caca! Hora de limpiar."
-          }
-        }
-      }
-    },
-    "💪 Your %@ is weak! Give it protein or train it." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "💪 ¡Tu %@ está débil! Dale proteína o entrénalo."
-          }
-        }
-      }
-    },
-    "🥺 Your %@ is so lonely… Open WatchTamer today, or it will be gone forever!" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "🥺 Tu %@ se siente muy solo… ¡Abre WatchTamer hoy o se irá para siempre!"
-          }
-        }
-      }
-    },
-    "🥺 Your %@ misses you! Open WatchTamer in the next 2 days, or it will be gone forever." : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "🥺 ¡Tu %@ te extraña! Abre WatchTamer en los próximos 2 días o se irá para siempre."
           }
         }
       }
