@@ -41,9 +41,12 @@ struct SettingsView: View {
                     set: { state.tamer.walkTraining = $0; state.save(); state.refreshSteps() }
                 ))
 
-                LabeledContent("Food", value: "every \(Tuning.walkFoodSteps) steps")
-                LabeledContent("Protein", value: "every \(Tuning.walkProteinSteps) steps")
-                LabeledContent("Training", value: "every \(Tuning.walkTrainSteps) steps")
+                LabeledContent("Food", value: String(localized: "every \(Tuning.walkFoodSteps) steps"))
+                LabeledContent("Protein", value: String(localized: "every \(Tuning.walkProteinSteps) steps"))
+                LabeledContent("Training", value: String(localized: "every \(Tuning.walkTrainSteps) steps"))
+                LabeledContent("Training reserve",
+                               value: String(localized: "every \(Tuning.reserveSteps) steps a day, up to \(Tuning.maxReserves)"))
+                LabeledContent("Reserves saved", value: "\(state.tamer.reserves)/\(Tuning.maxReserves)")
 
                 LabeledContent("Lifetime steps", value: "\(state.tamer.lifetimeSteps)")
                 LabeledContent("Walk trainings", value: "\(state.tamer.walkReps)")
@@ -53,6 +56,7 @@ struct SettingsView: View {
                 Text("""
                     • MEAT = hunger. PROTEIN = strength.
                     • Train by tapping fast or walking.
+                    • 5,000 steps a day = 1 training RESERVE (up to 4).
                     • FLUSH poop. Skull = MEDICINE.
                     • ! = your dino needs you.
                     • Each battle uses 1 heart. Friends swap codes, then both tap BATTLE.
@@ -67,6 +71,7 @@ struct SettingsView: View {
             Section("TESTING") {
                 Button("Skip 1 hour") { state.debugSkip(minutes: 60) }
                 Button("Add 250 steps") { state.creditSteps(250) }
+                Button("Add 5,000 steps") { state.creditSteps(5000) }
                 Button("Evolve now") { state.debugEvolve() }
                 Button("Make sick") { state.debugSick() }
                 Button("Away 14 days") { state.debugLonely() }
@@ -79,7 +84,7 @@ struct SettingsView: View {
                 if state.newEggUnlocksAt == nil {
                     Button("Start new egg", role: .destructive) { confirmReset = true }
                 } else {
-                    LabeledContent("New egg in", value: "\(state.newEggDaysLeft) days")
+                    LabeledContent("New egg in", value: String(localized: "\(state.newEggDaysLeft) days"))
                 }
             } footer: {
                 Text("You can start a new egg once every 2 weeks, or right away if your dino dies.")

@@ -1,0 +1,22 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "comment" : "App name on the Apple Watch",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "new", "value" : "WatchTamer" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "WatchTamer" } }
+      }
+    },
+    "NSMotionUsageDescription" : {
+      "comment" : "Why the game asks for step counting",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "new", "value" : "WatchTamer counts your steps so walking trains your dinosaur." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "WatchTamer cuenta tus pasos para que caminar entrene a tu dinosaurio." } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

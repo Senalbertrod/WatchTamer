@@ -38,6 +38,10 @@ Builds run from Xcode include a **Testing** section in Settings (skip time, add 
 | ➕ **Medicine** | Cure sickness and battle injuries (skull icon) |
 | ⚠️ **Call** | Blinks when your dino needs you. Ignore it for 10 minutes = 1 care mistake |
 
+**Complication:** add WatchTamer to your watch face. It shows what your dino needs most right now, in this order: 💀 medicine, 🍖 food, 💩 a flush, 💪 protein. When everything is fine, it shows your dino. It updates by itself, even while the game is closed.
+
+**Languages:** English and Spanish. The game follows your Apple Watch's language.
+
 **Notifications:** when the app is closed, your watch alerts you when your dino gets hungry 🍖, weak 💪, poops 💩 (each pile, with a warning before it gets sick), or gets sick 💀. Each type can be switched off in Settings. You also get a warning 2 days and 1 day before the 2-week limit below.
 
 **Time never stops.** Like the 90s toys, the game always runs in real time, with no pause and no fast-forward.
@@ -53,6 +57,7 @@ Swipe left for **Settings**: notification switches, walking on or off, and a sho
 | Every 250 | Food: +1 hunger heart (+1g) |
 | Every 500 | Protein: +1 strength heart (+2g) |
 | Every 1,000 | A training: +1 strength heart (−1g), counts toward evolution |
+| Every 5,000 in one day | A training **reserve**, saved for later (up to 4). Pick **RESERVE** on the Train menu to use one: it trains right away and counts toward evolution |
 
 Each one stops while its hearts are full, and starts again when a heart goes down. Pick WALK on the Train menu to see your steps toward each one.
 
@@ -123,11 +128,12 @@ WatchTamer has no accounts, ads, analytics or network code. Your dino, your sett
 - 1.0 is the first App Store release. After that, go up one step at a time: 1.1, 1.2, 1.3…
 - Every update gets a short, plain-English "What's New in This Version" list in App Store Connect, and the same list is added below.
 - The build number goes up by 1 on every upload, even when the version stays the same (for example, after a rejection).
-- **Update the wrapper too.** The app has two parts in Xcode: the iPhone wrapper ("WatchTamer") and the Apple Watch app ("WatchTamer Watch App"). Every update, change the version and build number on **both**, so they match. Then archive with the "WatchTamer" scheme (Product → Archive) and upload.
+- **Update the wrapper and the complication too.** The app has three parts in Xcode: the iPhone wrapper ("WatchTamer"), the Apple Watch app ("WatchTamer Watch App") and the complication ("WatchTamerWidgets"). Every update, change the version and build number on **all three**, so they match. Then archive with the "WatchTamer" scheme (Product → Archive) and upload.
 
 | Version | What's new |
 | --- | --- |
 | 1.0 | First App Store release. |
+| 1.1 | • New watch face complication: shows what your dino needs most (medicine, food, a flush or protein), or your dino when all is well.<br>• Training reserves: every 5,000 steps in a day saves a training (up to 4). Use one from the Train menu any time.<br>• Smoother flush: the wave sweeps across and washes each poop away.<br>• Special vibrations for big moments: hatching, evolving, winning or losing a battle, getting sick.<br>• Now in Spanish (Español). |
 
 ## Author
 

@@ -21,7 +21,9 @@ struct ContentView: View {
     @State private var facingRight = false
     @State private var frame = 0
     @State private var blink = false
-    @State private var flushProgress: CGFloat = 1
+    /// Flush wave position, 1 = right edge, 0 = left edge. nil = no wave on screen.
+    @State private var flushProgress: CGFloat? = nil
+    @State private var flushTask: Task<Void, Never>?
     @State private var friendCodeInput = ""
     @State private var showCodeEntry = false
     @State private var codeError = false
@@ -44,10 +46,7 @@ struct ContentView: View {
         // tap gestures, so the watch keyboard / Scribble / dictation can open.
         .sheet(isPresented: $showCodeEntry) { codeEntrySheet }
         .onChange(of: state.anim) { _, newValue in
-            if newValue == .flushing {
-                flushProgress = 1
-                withAnimation(.linear(duration: 1.2)) { flushProgress = 0 }
-            }
+            if newValue == .flushing { startFlushWave() }
         }
     }
 
@@ -267,24 +266,26 @@ struct ContentView: View {
                 }
 
 
-                // Poop piles on the right, 2 columns, bottom-up
+                // Poop piles on the right, 2 columns, bottom-up.
+                // Each pile washes away the moment the flush wave passes it.
+                let waveX = flushProgress.map { size.width * $0 }
                 ForEach(0..<pet.poops, id: \.self) { i in
                     let col = CGFloat(i % 2)
                     let row = CGFloat(i / 2)
+                    let poopX = size.width - (3.5 + col * 6) * dot
                     PixelSprite(rows: PixelArt.poop, dot: dot, color: pal.dot)
-                        .position(x: size.width - (3.5 + col * 6) * dot,
-                                  y: groundY - (2 + row * 5) * dot)
-                        .opacity(state.anim == .flushing && (size.width - (3.5 + col * 6) * dot) > size.width * flushProgress ? 0 : 1)
+                        .position(x: poopX, y: groundY - (2 + row * 5) * dot)
+                        .opacity(waveX.map { poopX > $0 } == true ? 0 : 1)
                 }
 
-                // Flush wave
-                if state.anim == .flushing {
+                // Flush wave: sweeps from the right edge to the left, one dot-step at a time
+                if let waveX {
                     VStack(spacing: dot) {
                         ForEach(0..<Int(size.height / (2 * dot)), id: \.self) { _ in
                             Rectangle().fill(pal.dot).frame(width: 2 * dot, height: dot)
                         }
                     }
-                    .position(x: size.width * flushProgress, y: size.height / 2)
+                    .position(x: waveX, y: size.height / 2)
                 }
             }
         }
@@ -299,8 +300,8 @@ struct ContentView: View {
             PixelSprite(rows: rows, dot: eggDot, color: pal.dot)
                 .position(x: size.width / 2, y: groundY - spriteH / 2)
             VStack(spacing: 1) {
-                lcdText("TAP OR WALK", 9)
-                lcdText("TO HATCH: \(tapsLeft)", 9)
+                lcdText(String(localized: "TAP OR WALK"), 9)
+                lcdText(String(localized: "TO HATCH: \(tapsLeft)"), 9)
             }
             .position(x: size.width / 2, y: 4 * dot)
         }
@@ -325,6 +326,27 @@ struct ContentView: View {
         return facingRight
     }
 
+    /// Moves the flush wave from the right edge to the left in small LCD-style steps
+    /// (no smooth sliding), always starting on the right.
+    private func startFlushWave() {
+        flushTask?.cancel()
+        flushProgress = 1
+        flushTask = Task { @MainActor in
+            let steps = 20
+            for step in 1...steps {
+                try? await Task.sleep(for: .milliseconds(60))
+                if Task.isCancelled { return }
+                flushProgress = 1 - CGFloat(step) / CGFloat(steps)
+            }
+            // Leave the wave at the left edge until the game finishes flushing.
+            while state.anim == .flushing {
+                try? await Task.sleep(for: .milliseconds(50))
+                if Task.isCancelled { return }
+            }
+            flushProgress = nil
+        }
+    }
+
     private func stepAnimation() {
         blink.toggle()
         frame = frame == 0 ? 1 : 0
@@ -347,29 +369,29 @@ struct ContentView: View {
             case 0:
                 lcdText(pet.formName, 12)
                 lcdText(pet.stage.displayName, 9)
-                lcdText("AGE \(pet.ageDays)d  GEN \(pet.generation)", 9)
-                lcdText("WEIGHT \(pet.weight)g", 9)
+                lcdText(String(localized: "AGE \(pet.ageDays)d  GEN \(pet.generation)"), 9)
+                lcdText(String(localized: "WEIGHT \(pet.weight)g"), 9)
             case 1:
-                lcdText("HUNGRY", 11)
+                lcdText(String(localized: "HUNGRY"), 11)
                 HeartsRow(filled: pet.hunger, dot: small, color: pal.dot)
             case 2:
-                lcdText("STRENGTH", 11)
+                lcdText(String(localized: "STRENGTH"), 11)
                 HeartsRow(filled: pet.strength, dot: small, color: pal.dot)
             case 3:
-                lcdText("EFFORT", 11)
+                lcdText(String(localized: "EFFORT"), 11)
                 HeartsRow(filled: pet.effort, dot: small, color: pal.dot)
-                lcdText("TRAINED \(pet.trainings)x", 9)
+                lcdText(String(localized: "TRAINED \(pet.trainings)x"), 9)
             case 4:
-                lcdText("BATTLES", 11)
-                lcdText("THIS STAGE  W\(pet.wins) L\(pet.battles - pet.wins)  \(Int(pet.winRate * 100))%", 9)
-                lcdText("ALL TIME  W\(pet.totalWins) L\(pet.totalBattles - pet.totalWins)", 9)
+                lcdText(String(localized: "BATTLES"), 11)
+                lcdText(String(localized: "THIS STAGE  W\(pet.wins) L\(pet.battles - pet.wins)  \(Int(pet.winRate * 100))%"), 9)
+                lcdText(String(localized: "ALL TIME  W\(pet.totalWins) L\(pet.totalBattles - pet.totalWins)"), 9)
             default:
-                lcdText("CARE", 11)
-                lcdText("MISTAKES \(pet.careMistakes)", 9)
-                lcdText("INJURIES \(pet.injuries)/\(Tuning.maxInjuries)", 9)
-                lcdText("STEPS \(state.tamer.lifetimeSteps)", 9)
+                lcdText(String(localized: "CARE"), 11)
+                lcdText(String(localized: "MISTAKES \(pet.careMistakes)"), 9)
+                lcdText(String(localized: "INJURIES \(pet.injuries)/\(Tuning.maxInjuries)"), 9)
+                lcdText(String(localized: "STEPS \(state.tamer.lifetimeSteps)"), 9)
             }
-            lcdText("TAP ▶ \(page + 1)/6", 7)
+            lcdText(String(localized: "TAP ▶ \(page + 1)/6"), 7)
                 .opacity(0.6)
         }
         .padding(4)
@@ -379,21 +401,26 @@ struct ContentView: View {
 
     private func feedMenu(dot: CGFloat) -> some View {
         HStack(spacing: 6) {
-            menuChoice(title: "MEAT", sprite: PixelArt.meat, dot: dot) { state.feed(.meat) }
-            menuChoice(title: "PROTEIN", sprite: PixelArt.protein, dot: dot) { state.feed(.protein) }
+            menuChoice(title: String(localized: "MEAT"), sprite: PixelArt.meat, dot: dot) { state.feed(.meat) }
+            menuChoice(title: String(localized: "PROTEIN"), sprite: PixelArt.protein, dot: dot) { state.feed(.protein) }
         }
         .padding(4)
     }
 
     private func trainMenu(dot: CGFloat) -> some View {
-        HStack(spacing: 6) {
-            menuChoice(title: "TAP", symbol: "hand.tap.fill") { state.startTapTraining() }
-            menuChoice(title: "WALK", symbol: "figure.walk") { state.openWalk() }
+        HStack(spacing: 4) {
+            menuChoice(title: String(localized: "TAP"), symbol: "hand.tap.fill", symbolSize: 20) { state.startTapTraining() }
+            menuChoice(title: String(localized: "WALK"), symbol: "figure.walk", symbolSize: 20) { state.openWalk() }
+            // Training reserves saved by walking 5,000 steps a day
+            menuChoice(title: String(localized: "RESERVE"), symbol: "bolt.heart.fill", symbolSize: 20,
+                       detail: "\(state.tamer.reserves)/\(Tuning.maxReserves)") { state.useReserve() }
+                .opacity(state.tamer.reserves > 0 ? 1 : 0.45)
         }
         .padding(4)
     }
 
     private func menuChoice(title: String, sprite: [String]? = nil, symbol: String? = nil,
+                            symbolSize: CGFloat = 26, detail: String? = nil,
                             dot: CGFloat = 3, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             VStack(spacing: 4) {
@@ -402,10 +429,13 @@ struct ContentView: View {
                 }
                 if let symbol {
                     Image(systemName: symbol)
-                        .font(.system(size: 26, weight: .bold))
+                        .font(.system(size: symbolSize, weight: .bold))
                         .foregroundColor(pal.dot)
                 }
                 lcdText(title, 10)
+                if let detail {
+                    lcdText(detail, 9)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .overlay(RoundedRectangle(cornerRadius: 4).stroke(pal.dot.opacity(0.5), lineWidth: 1))
@@ -418,24 +448,24 @@ struct ContentView: View {
 
     private func battleMenu() -> some View {
         HStack(spacing: 6) {
-            menuChoice(title: "CPU", symbol: "cpu") { state.startBattle() }
-            menuChoice(title: "FRIEND", symbol: "person.2.fill") { state.openFriendCode() }
+            menuChoice(title: String(localized: "CPU"), symbol: "cpu") { state.startBattle() }
+            menuChoice(title: String(localized: "FRIEND"), symbol: "person.2.fill") { state.openFriendCode() }
         }
         .padding(4)
     }
 
     private func friendCodeScene() -> some View {
         VStack(spacing: 3) {
-            lcdText("YOUR CODE", 9)
+            lcdText(String(localized: "YOUR CODE"), 9)
             Text(state.tamer.myBattleCode ?? "------")
                 .font(.system(size: 18, weight: .heavy, design: .monospaced))
                 .foregroundColor(pal.dot)
             if let last = state.tamer.lastBattleCode {
-                lcdText("LAST CODE \(last)", 8)
+                lcdText(String(localized: "LAST CODE \(last)"), 8)
             }
-            lcdText("TAP TO ENTER", 10)
+            lcdText(String(localized: "TAP TO ENTER"), 10)
                 .opacity(blink ? 1 : 0.4)
-            lcdText("FRIEND'S CODE", 10)
+            lcdText(String(localized: "FRIEND'S CODE"), 10)
                 .opacity(blink ? 1 : 0.4)
         }
         .padding(4)
@@ -525,7 +555,7 @@ struct ContentView: View {
         return ZStack {
             VStack(spacing: 2) {
                 HStack {
-                    lcdText(state.trainOver ? (state.trainSuccess ? "GREAT!" : "WEAK...") : "TAP FAST!", 10)
+                    lcdText(state.trainOver ? (state.trainSuccess ? String(localized: "GREAT!") : String(localized: "WEAK...")) : String(localized: "TAP FAST!"), 10)
                     Spacer()
                     lcdText(String(format: "%.1f", state.trainTimeLeft), 10)
                 }
@@ -559,29 +589,30 @@ struct ContentView: View {
                 Image(systemName: "figure.walk")
                     .font(.system(size: 16, weight: .bold))
                     .foregroundColor(pal.dot)
-                lcdText("WALKING", 10)
+                lcdText(String(localized: "WALKING"), 10)
             }
             if !CMPedometer.isStepCountingAvailable() {
-                lcdText("NO STEP SENSOR", 9)
-                lcdText("USE TAP TRAINING", 8)
+                lcdText(String(localized: "NO STEP SENSOR"), 9)
+                lcdText(String(localized: "USE TAP TRAINING"), 8)
             } else if !t.walkTraining {
-                lcdText("TURNED OFF", 9)
-                lcdText("SWIPE → SETTINGS", 8)
+                lcdText(String(localized: "TURNED OFF"), 9)
+                lcdText(String(localized: "SWIPE → SETTINGS"), 8)
             } else {
-                walkRow("FOOD", t.foodBank, Tuning.walkFoodSteps, full: pet.hunger >= 4)
-                walkRow("PROTEIN", t.proteinBank, Tuning.walkProteinSteps, full: pet.strength >= 4)
-                walkRow("TRAIN", t.stepBank, Tuning.walkTrainSteps, full: pet.strength >= 4)
-                lcdText("JUST WALK - IT COUNTS!", 7)
-                    .opacity(0.7)
+                walkRow(String(localized: "FOOD"), t.foodBank, Tuning.walkFoodSteps, full: pet.hunger >= 4)
+                walkRow(String(localized: "PROTEIN"), t.proteinBank, Tuning.walkProteinSteps, full: pet.strength >= 4)
+                walkRow(String(localized: "TRAIN"), t.stepBank, Tuning.walkTrainSteps, full: pet.strength >= 4)
+                walkRow(String(localized: "RESERVE \(t.reserves)/\(Tuning.maxReserves)"), state.reserveStepsToday,
+                        Tuning.reserveSteps, full: t.reserves >= Tuning.maxReserves)
             }
         }
-        .padding(4)
+        .padding(.horizontal, 4)
+        .padding(.vertical, 2)   // four rows: keep room on the smallest watch
     }
 
-    /// One line on the walk screen: steps toward the next food / protein / training.
+    /// One line on the walk screen: steps toward the next food / protein / training / reserve.
     private func walkRow(_ label: String, _ steps: Int, _ per: Int, full: Bool) -> some View {
         VStack(spacing: 1) {
-            lcdText(full ? "\(label)  FULL" : "\(label)  \(steps)/\(per)", 8)
+            lcdText(full ? String(localized: "\(label)  FULL") : "\(label)  \(steps)/\(per)", 8)
             LCDBar(progress: full ? 1 : Double(steps) / Double(per), color: pal.dot, height: 4)
                 .padding(.horizontal, 6)
         }
@@ -608,7 +639,7 @@ struct ContentView: View {
             switch state.battlePhase {
             case .docking(let step):
                 VStack(spacing: 4) {
-                    lcdText("LINKING...", 11)
+                    lcdText(String(localized: "LINKING..."), 11)
                     HStack(spacing: 3) {
                         ForEach(0..<3, id: \.self) { i in
                             Rectangle()
@@ -616,7 +647,8 @@ struct ContentView: View {
                                 .frame(width: 14, height: 6)
                         }
                     }
-                    lcdText((state.isFriendBattle ? "FRIEND: " : "RIVAL: ") + state.enemySpecies.displayName, 8)
+                    lcdText(state.isFriendBattle ? String(localized: "FRIEND: \(state.enemySpecies.displayName)")
+                                                : String(localized: "RIVAL: \(state.enemySpecies.displayName)"), 8)
                 }
             case .fighting, .result:
                 HStack {
@@ -654,6 +686,17 @@ struct ContentView: View {
 
     // MARK: - Dead
 
+    /// The saved reason stays in English (it's part of the save); this is what's shown.
+    private var deathReasonText: String {
+        switch pet.deathReason {
+        case "LONELY": return String(localized: "LONELY")
+        case "SICKNESS": return String(localized: "SICKNESS")
+        case "HUNGER": return String(localized: "HUNGER")
+        case "INJURIES": return String(localized: "INJURIES")
+        default: return pet.deathReason
+        }
+    }
+
     private var deadView: some View {
         VStack(spacing: 6) {
             ZStack {
@@ -663,7 +706,7 @@ struct ContentView: View {
                     Text("\(pet.formName) RIP")
                         .font(.system(size: 11, weight: .heavy, design: .monospaced))
                         .foregroundColor(pal.dot)
-                    Text("\(pet.deathReason) · AGE \(pet.ageDays)d")
+                    Text("\(deathReasonText) · AGE \(pet.ageDays)d")
                         .font(.system(size: 9, weight: .bold, design: .monospaced))
                         .foregroundColor(pal.dot)
                 }

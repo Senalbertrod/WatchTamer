@@ -11,6 +11,7 @@ import WatchKit
 import Combine
 import CoreMotion
 import UserNotifications
+import WidgetKit
 
 // MARK: - UI enums
 
@@ -108,6 +109,20 @@ struct Tamer: Codable, Equatable {
     }
     var lifetimeSteps = 0
     var walkReps = 0
+
+    // Training reserves (added in 1.1; optional so 1.0 saves still load).
+    // Every `Tuning.reserveSteps` steps in one day saves a ready-made training.
+    var reservesSaved: Int? = nil
+    var reserveStepsSaved: Int? = nil      // steps today toward the next reserve
+    var reserveDaySaved: Date? = nil       // start of the day those steps belong to
+    var reserves: Int {
+        get { reservesSaved ?? 0 }
+        set { reservesSaved = newValue }
+    }
+    var reserveSteps: Int {
+        get { reserveStepsSaved ?? 0 }
+        set { reserveStepsSaved = newValue }
+    }
 
     var myBattleCode: String? = nil  // snapshot shown to friends; renewed after each battle
 
@@ -269,12 +284,12 @@ final class DinoState: ObservableObject {
         if events.contains(.died) {
             screen = .home
             anim = .none
-            haptic(.failure)
+            specialHaptic(.died)
             return
         }
         if events.contains(.hatched) {
-            haptic(.success)
-            showToast("HATCHED!")
+            specialHaptic(.hatched)
+            showToast(String(localized: "HATCHED!"))
         }
         if events.contains(.evolved) {
             screen = .home
@@ -282,9 +297,9 @@ final class DinoState: ObservableObject {
         }
         guard live else { return }
         if events.contains(.call) { haptic(.notification) }
-        if events.contains(.sick) { haptic(.failure) }
-        if events.contains(.fellAsleep) { showToast("BEDTIME!") }
-        if events.contains(.wokeUp) { showToast("GOOD MORNING") }
+        if events.contains(.sick) { specialHaptic(.sick) }
+        if events.contains(.fellAsleep) { showToast(String(localized: "BEDTIME!")) }
+        if events.contains(.wokeUp) { showToast(String(localized: "GOOD MORNING")) }
     }
 
     func handleScenePhase(_ phase: ScenePhase) {
@@ -294,12 +309,13 @@ final class DinoState: ObservableObject {
             checkAbandoned()
             catchUp()
             refreshSteps()
-            if isAsleep { showToast("ZZZ... TAP 💡 TO WAKE") }
+            if isAsleep { showToast(String(localized: "ZZZ... TAP 💡 TO WAKE")) }
         case .inactive:
             // Wrist lowered for a moment: just save.
             catchUp()
             save()
             scheduleCareReminder()
+            updateComplication()
         case .background:
             // Really left the game. During bedtime, the light goes off and the dino sleeps.
             catchUp()
@@ -308,6 +324,7 @@ final class DinoState: ObservableObject {
             }
             save()
             scheduleCareReminder()
+            updateComplication()
         @unknown default:
             break
         }
@@ -338,6 +355,34 @@ final class DinoState: ObservableObject {
         WKInterfaceDevice.current().play(type)
     }
 
+    /// Big moments get their own short tap pattern, so you can feel what happened
+    /// without looking. Everyday buttons keep their single small tap.
+    enum SpecialMoment {
+        case hatched, evolved, won, lost, sick, died, reserve
+
+        /// Each tap and how long to wait before it (seconds).
+        var pattern: [(WKHapticType, Double)] {
+            switch self {
+            case .hatched: return [(.click, 0), (.click, 0.15), (.success, 0.25)]
+            case .evolved: return [(.success, 0), (.directionUp, 0.35), (.success, 0.35)]
+            case .won:     return [(.success, 0), (.success, 0.3)]
+            case .lost:    return [(.failure, 0), (.directionDown, 0.35)]
+            case .sick:    return [(.failure, 0), (.failure, 0.4)]
+            case .died:    return [(.failure, 0), (.failure, 0.5), (.failure, 0.5)]
+            case .reserve: return [(.success, 0), (.click, 0.2)]
+            }
+        }
+    }
+
+    func specialHaptic(_ moment: SpecialMoment) {
+        Task { @MainActor in
+            for (type, wait) in moment.pattern {
+                if wait > 0 { try? await Task.sleep(for: .seconds(wait)) }
+                haptic(type)
+            }
+        }
+    }
+
     func showToast(_ text: String) {
         toast = text
         toastTask?.cancel()
@@ -350,10 +395,10 @@ final class DinoState: ObservableObject {
     /// Common checks before an action. Shows a message and returns false if not allowed.
     private func canAct(allowSick: Bool = true) -> Bool {
         if pet.isDead { return false }
-        if pet.stage == .egg { showToast("TAP THE EGG"); return false }
+        if pet.stage == .egg { showToast(String(localized: "TAP THE EGG")); return false }
         if anim != .none { return false }
-        if isAsleep { showToast("ZZZ... TAP 💡 TO WAKE"); haptic(.failure); return false }
-        if !allowSick && pet.isSick { showToast("SICK! MEDS"); haptic(.failure); return false }
+        if isAsleep { showToast(String(localized: "ZZZ... TAP 💡 TO WAKE")); haptic(.failure); return false }
+        if !allowSick && pet.isSick { showToast(String(localized: "SICK! MEDS")); haptic(.failure); return false }
         return true
     }
 
@@ -365,7 +410,7 @@ final class DinoState: ObservableObject {
         haptic(.click)
         switch item {
         case .status:
-            if pet.stage == .egg { showToast("TAP THE EGG"); return }
+            if pet.stage == .egg { showToast(String(localized: "TAP THE EGG")); return }
             if case .status = screen { screen = .home } else { screen = .status(0) }
         case .feed:
             if screen == .feed { screen = .home; return }
@@ -423,7 +468,7 @@ final class DinoState: ObservableObject {
         guard canAct() else { return }
         if kind == .meat && pet.hunger >= 4 {
             anim = .refusing
-            showToast("FULL!")
+            showToast(String(localized: "FULL!"))
             haptic(.failure)
             Task {
                 try? await Task.sleep(for: .seconds(1.2))
@@ -457,7 +502,7 @@ final class DinoState: ObservableObject {
 
     func flush() {
         guard canAct() else { return }
-        if pet.poops == 0 { showToast("ALL CLEAN"); return }
+        if pet.poops == 0 { showToast(String(localized: "ALL CLEAN")); return }
         anim = .flushing
         haptic(.start)
         Task {
@@ -474,14 +519,14 @@ final class DinoState: ObservableObject {
         catchUp()                       // settle time with the old light setting first
         pet.lightsOn.toggle()
         if pet.stage != .egg && pet.isBedtime(at: Date()) {
-            showToast(pet.lightsOn ? "WOKE UP!" : "GOOD NIGHT")
+            showToast(pet.lightsOn ? String(localized: "WOKE UP!") : String(localized: "GOOD NIGHT"))
         }
         save()
     }
 
     func giveMedicine() {
         guard !pet.isDead, pet.stage != .egg, anim == .none else { return }
-        if !pet.isSick { showToast("HEALTHY!"); return }
+        if !pet.isSick { showToast(String(localized: "HEALTHY!")); return }
         pet.isSick = false
         pet.sickMinutes = 0
         anim = .healing
@@ -497,7 +542,7 @@ final class DinoState: ObservableObject {
 
     private func playEvolution() {
         anim = .evolving
-        haptic(.success)
+        specialHaptic(.evolved)
         Task {
             for _ in 0..<10 {
                 flashOn.toggle()
@@ -593,6 +638,11 @@ final class DinoState: ObservableObject {
     func creditSteps(_ steps: Int) {
         guard steps > 0 else { return }
         tamer.lifetimeSteps += steps
+        let newReserves = creditReserveSteps(steps)
+        if newReserves > 0 {
+            specialHaptic(.reserve)
+            showToast(String(localized: "RESERVE +\(newReserves)"))   // the walk message below may add to it
+        }
         if pet.isDead { save(); return }
 
         if pet.stage == .egg {
@@ -636,12 +686,13 @@ final class DinoState: ObservableObject {
         }
         tamer.walkReps += reps
         if foods + proteins + reps > 0 {
-            haptic(.success)
+            if newReserves == 0 { haptic(.success) }
             var parts: [String] = []
-            if foods > 0 { parts.append("FOOD+\(foods)") }
-            if proteins > 0 { parts.append("PROTEIN+\(proteins)") }
-            if reps > 0 { parts.append("TRAIN+\(reps)") }
-            showToast("WALK " + parts.joined(separator: " "))
+            if foods > 0 { parts.append(String(localized: "FOOD+\(foods)")) }
+            if proteins > 0 { parts.append(String(localized: "PROTEIN+\(proteins)")) }
+            if reps > 0 { parts.append(String(localized: "TRAIN+\(reps)")) }
+            if newReserves > 0 { parts.append(String(localized: "RESERVE+\(newReserves)")) }
+            showToast(String(localized: "WALK \(parts.joined(separator: " "))"))
             if screen == .home && anim == .none {
                 anim = .walkRep
                 Task {
@@ -653,13 +704,62 @@ final class DinoState: ObservableObject {
         save()
     }
 
+    // MARK: - Training reserves
+
+    /// Counts today's steps toward training reserves: every `Tuning.reserveSteps`
+    /// steps in one day saves one, up to `Tuning.maxReserves`. Returns how many were earned.
+    private func creditReserveSteps(_ steps: Int) -> Int {
+        let today = Calendar.autoupdatingCurrent.startOfDay(for: Date())
+        if tamer.reserveDaySaved != today {
+            tamer.reserveDaySaved = today
+            tamer.reserveSteps = 0
+        }
+        tamer.reserveSteps += steps
+        var earned = 0
+        while tamer.reserveSteps >= Tuning.reserveSteps && tamer.reserves < Tuning.maxReserves {
+            tamer.reserveSteps -= Tuning.reserveSteps
+            tamer.reserves += 1
+            earned += 1
+        }
+        if tamer.reserves >= Tuning.maxReserves {
+            tamer.reserveSteps = min(tamer.reserveSteps, Tuning.reserveSteps - 1)
+        }
+        return earned
+    }
+
+    /// Steps walked today toward the next reserve (0 if the last count was on an earlier day).
+    var reserveStepsToday: Int {
+        tamer.reserveDaySaved == Calendar.autoupdatingCurrent.startOfDay(for: Date()) ? tamer.reserveSteps : 0
+    }
+
+    /// Use one saved reserve: a ready-made training that counts toward evolving.
+    func useReserve() {
+        guard canAct(allowSick: false) else { screen = .home; return }
+        guard tamer.reserves > 0 else {
+            showToast(String(localized: "NO RESERVES"))
+            haptic(.failure)
+            return
+        }
+        tamer.reserves -= 1
+        pet.applyTraining(success: true, weightLoss: 1)
+        screen = .home
+        anim = .walkRep
+        haptic(.success)
+        showToast(String(localized: "TRAINED! \(tamer.reserves) LEFT"))
+        save()
+        Task {
+            try? await Task.sleep(for: .seconds(1.4))
+            if anim == .walkRep { anim = .none }
+        }
+    }
+
     // MARK: - Battle
 
     /// Checks the classic battle rules and explains why not.
     func battleReady() -> Bool {
         guard canAct(allowSick: false) else { return false }
-        if pet.stage.order < DinoStage.rookie.order { showToast("TOO YOUNG"); haptic(.failure); return false }
-        if pet.hunger == 0 || pet.strength == 0 { showToast("TOO WEAK"); haptic(.failure); return false }
+        if pet.stage.order < DinoStage.rookie.order { showToast(String(localized: "TOO YOUNG")); haptic(.failure); return false }
+        if pet.hunger == 0 || pet.strength == 0 { showToast(String(localized: "TOO WEAK")); haptic(.failure); return false }
         return true
     }
 
@@ -702,19 +802,19 @@ final class DinoState: ObservableObject {
 
     func startFriendBattle(code input: String) {
         guard let theirs = BattleCode.decode(input) else {
-            showToast("BAD CODE")
+            showToast(String(localized: "BAD CODE"))
             haptic(.failure)
             return
         }
         let mine = myBattleCode
         if theirs == mine {
-            showToast("THAT'S YOU!")
+            showToast(String(localized: "THAT'S YOU!"))
             haptic(.failure)
             return
         }
         // Each friend code works only once (compared in its clean "ABC-123" form).
         if tamer.usedFriendCodes.contains(theirs.text) {
-            showToast("ALREADY BATTLED")
+            showToast(String(localized: "ALREADY BATTLED"))
             haptic(.failure)
             return
         }
@@ -786,12 +886,12 @@ final class DinoState: ObservableObject {
         }
         pet.strength = max(0, pet.strength - 1)
         pet.weight = max(5, pet.weight - 4)
-        battleText = won ? "YOU WIN!" : "YOU LOSE..."
+        battleText = won ? String(localized: "YOU WIN!") : String(localized: "YOU LOSE...")
         if Double.random(in: 0..<1) < (won ? 0.1 : 0.25) {
             pet.makeSick()
-            battleText += " INJURED!"
+            battleText += " " + String(localized: "INJURED!")
         }
-        haptic(won ? .success : .failure)
+        specialHaptic(won ? .won : .lost)
         if plan != nil { tamer.myBattleCode = nil }   // fresh code for the next friend battle
         save()
 
@@ -804,7 +904,7 @@ final class DinoState: ObservableObject {
         shotHit = hit
         shotProgress = 0
         shotActive = true
-        battleText = fromPlayer ? "ATTACK!" : "RIVAL ATTACKS!"
+        battleText = fromPlayer ? String(localized: "ATTACK!") : String(localized: "RIVAL ATTACKS!")
         haptic(fromPlayer ? .directionUp : .directionDown)
         withAnimation(.linear(duration: 0.6)) { shotProgress = 1 }
         try? await Task.sleep(for: .milliseconds(620))
@@ -817,10 +917,10 @@ final class DinoState: ObservableObject {
                 playerLives -= 1
                 playerShake = true
             }
-            battleText = "HIT!"
+            battleText = String(localized: "HIT!")
             haptic(.notification)
         } else {
-            battleText = "MISS!"
+            battleText = String(localized: "MISS!")
         }
         try? await Task.sleep(for: .milliseconds(380))
         playerShake = false
@@ -847,7 +947,7 @@ final class DinoState: ObservableObject {
     /// Every new egg rolls the dice: 88% normal, 10% rare, 2% spiky.
     func newEgg() {
         guard newEggUnlocksAt == nil else {
-            showToast("NEW EGG IN \(newEggDaysLeft)d")
+            showToast(String(localized: "NEW EGG IN \(newEggDaysLeft)d"))
             haptic(.failure)
             return
         }
@@ -861,8 +961,8 @@ final class DinoState: ObservableObject {
         anim = .none
         switch kind {
         case .normal: haptic(.retry)
-        case .rare: showToast("RARE EGG!"); haptic(.success)
-        case .spiky: showToast("SPIKY EGG!!"); haptic(.success)
+        case .rare: showToast(String(localized: "RARE EGG!")); haptic(.success)
+        case .spiky: showToast(String(localized: "SPIKY EGG!!")); haptic(.success)
         }
         save()
     }
@@ -890,7 +990,7 @@ final class DinoState: ObservableObject {
         if pet.tryEvolve() {
             handle([.evolved], live: true)
         } else {
-            showToast("FINAL FORM")
+            showToast(String(localized: "FINAL FORM"))
         }
         save()
     }
@@ -911,6 +1011,15 @@ final class DinoState: ObservableObject {
         save()
     }
     #endif
+
+    // MARK: - Complication
+
+    /// Leaves the complication a fresh plan, and refreshes it only if the plan changed.
+    func updateComplication() {
+        if CareSnapshot.plan(for: pet).save() {
+            WidgetCenter.shared.reloadAllTimelines()
+        }
+    }
 
     // MARK: - Notifications
 
@@ -942,19 +1051,19 @@ final class DinoState: ObservableObject {
 
         // Warn before the 14-day "left alone" rule: 2 days and 1 day before.
         let lonelyAt = Date().addingTimeInterval(Tuning.lonelyDays * 24 * 3600)
-        for (id, daysBefore, text) in [("lonely-2", 2.0, "misses you! Open WatchTamer in the next 2 days, or it will be gone forever."),
-                                       ("lonely-1", 1.0, "is so lonely… Open WatchTamer today, or it will be gone forever!")] {
+        let name = pet.formName
+        for (id, daysBefore, text) in [("lonely-2", 2.0, String(localized: "🥺 Your \(name) misses you! Open WatchTamer in the next 2 days, or it will be gone forever.")),
+                                       ("lonely-1", 1.0, String(localized: "🥺 Your \(name) is so lonely… Open WatchTamer today, or it will be gone forever!"))] {
             let date = lonelyAt.addingTimeInterval(-daysBefore * 24 * 3600)
             let content = UNMutableNotificationContent()
             content.title = "WatchTamer"
-            content.body = "🥺 Your \(pet.formName) \(text)"
+            content.body = text
             content.sound = .default
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(60, date.timeIntervalSinceNow), repeats: false)
             center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger), withCompletionHandler: nil)
         }
 
         var p = pet
-        let name = p.formName
         let secPerMin = secondsPerGameMinute
         var t = p.lastUpdate
         var hungerSent = false
@@ -983,11 +1092,11 @@ final class DinoState: ObservableObject {
             if events.contains(.call) {
                 if tamer.notifyHunger && !hungerSent && p.hungerCall.isCalling && !before.hungerCall.isCalling {
                     hungerSent = true
-                    add("hungry", at: t, "🍖 Your \(name) is hungry! Feed it within 10 minutes.")
+                    add("hungry", at: t, String(localized: "🍖 Your \(name) is hungry! Feed it within 10 minutes."))
                 }
                 if tamer.notifyHunger && !proteinSent && p.strengthCall.isCalling && !before.strengthCall.isCalling {
                     proteinSent = true
-                    add("protein", at: t, "💪 Your \(name) is weak! Give it protein or train it.")
+                    add("protein", at: t, String(localized: "💪 Your \(name) is weak! Give it protein or train it."))
                 }
             }
 
@@ -995,18 +1104,18 @@ final class DinoState: ObservableObject {
                 poopsSent += 1
                 let body: String
                 if p.poops >= Tuning.maxPoops - 1 {
-                    body = "💩 \(p.poops) poops! Flush now or your \(name) will get sick!"
+                    body = String(localized: "💩 \(p.poops) poops! Flush now or your \(name) will get sick!")
                 } else if p.poops == 1 {
-                    body = "💩 Your \(name) pooped! Time to flush."
+                    body = String(localized: "💩 Your \(name) pooped! Time to flush.")
                 } else {
-                    body = "💩 \(p.poops) poops piling up. Flush them!"
+                    body = String(localized: "💩 \(p.poops) poops piling up. Flush them!")
                 }
                 add("poop-\(poopsSent)", at: t, body)
             }
 
             if events.contains(.sick) && tamer.notifySick && !sickSent {
                 sickSent = true
-                add("sick", at: t, "💀 Your \(name) is sick! Give it medicine.")
+                add("sick", at: t, String(localized: "💀 Your \(name) is sick! Give it medicine."))
             }
 
             if p.isDead { break }

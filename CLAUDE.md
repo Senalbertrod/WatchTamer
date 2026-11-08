@@ -1,6 +1,6 @@
 # WatchTamer
 
-A 90s-style virtual pet (dinosaur) for Apple Watch. SwiftUI watchOS app, `WatchTamer.xcodeproj`, target **WatchTamer Watch App**. Bedtime turns the light off by itself and follows the watch's current time zone (`Calendar.autoupdatingCurrent`). Has a privacy manifest. Builds from Xcode show a Testing section in Settings; App Store builds leave it out.
+A 90s-style virtual pet (dinosaur) for Apple Watch. SwiftUI watchOS app, `WatchTamer.xcodeproj`, target **WatchTamer Watch App**, inside the iPhone wrapper **WatchTamer**, with the complication target **WatchTamerWidgets** (reads `ComplicationData.swift` plans through the App Group `group.com.senalbert.WatchTamer`). English and Spanish (`Localizable.xcstrings`). Bedtime turns the light off by itself and follows the watch's current time zone (`Calendar.autoupdatingCurrent`). Has a privacy manifest. Builds from Xcode show a Testing section in Settings; App Store builds leave it out.
 
 ## How Senalbert likes to work
 
@@ -15,7 +15,7 @@ A 90s-style virtual pet (dinosaur) for Apple Watch. SwiftUI watchOS app, `WatchT
 - 1.0 is the first release, then 1.1, 1.2, and so on.
 - Every update gets a "What's New" list (the README's Versions section).
 - The build number goes up by 1 on every upload.
-- Every update: change the version and build number on both the iPhone wrapper target "WatchTamer" and the "WatchTamer Watch App" target, so they match. Archive with the "WatchTamer" scheme.
+- Every update: change the version and build number on the iPhone wrapper target "WatchTamer", the "WatchTamer Watch App" target and the "WatchTamerWidgets" complication, so all three match. Archive with the "WatchTamer" scheme.
 
 ## Senalbert's projects
 

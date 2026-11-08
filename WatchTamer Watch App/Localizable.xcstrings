@@ -1,0 +1,1563 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@  FULL" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@  LLENO"
+          }
+        }
+      }
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@"
+          }
+        }
+      }
+    },
+    "%@ RIP" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ QEPD"
+          }
+        }
+      }
+    },
+    "%@ · AGE %lldd" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · EDAD %lldd"
+          }
+        }
+      }
+    },
+    "%lld days" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld day"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld days"
+                }
+              }
+            }
+          }
+        },
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld día"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld días"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "AGE %lldd  GEN %lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EDAD %lldd  GEN %lld"
+          }
+        }
+      }
+    },
+    "ALL CLEAN" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TODO LIMPIO"
+          }
+        }
+      }
+    },
+    "ALL GOOD" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TODO BIEN"
+          }
+        }
+      }
+    },
+    "ALL TIME  W%lld L%lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TOTAL  G%lld P%lld"
+          }
+        }
+      }
+    },
+    "ALREADY BATTLED" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "YA PELEARON"
+          }
+        }
+      }
+    },
+    "ATTACK!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡ATAQUE!"
+          }
+        }
+      }
+    },
+    "Add 250 steps" : {
+      "shouldTranslate" : false
+    },
+    "Add 5,000 steps" : {
+      "shouldTranslate" : false
+    },
+    "Away 14 days" : {
+      "shouldTranslate" : false
+    },
+    "BABY I" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BEBÉ I"
+          }
+        }
+      }
+    },
+    "BABY II" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BEBÉ II"
+          }
+        }
+      }
+    },
+    "BAD CODE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CÓDIGO MALO"
+          }
+        }
+      }
+    },
+    "BAD CODE. CHECK IT AND TRY AGAIN." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CÓDIGO MALO. REVÍSALO E INTÉNTALO DE NUEVO."
+          }
+        }
+      }
+    },
+    "BATTLES" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BATALLAS"
+          }
+        }
+      }
+    },
+    "BEDTIME!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡A DORMIR!"
+          }
+        }
+      }
+    },
+    "CARE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CUIDADO"
+          }
+        }
+      }
+    },
+    "CHAMPION" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CAMPEÓN"
+          }
+        }
+      }
+    },
+    "CPU" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CPU"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
+          }
+        }
+      }
+    },
+    "Care reminders" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avisos"
+          }
+        }
+      }
+    },
+    "DINO KID" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DINO NIÑO"
+          }
+        }
+      }
+    },
+    "EFFORT" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ESFUERZO"
+          }
+        }
+      }
+    },
+    "EGG" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HUEVO"
+          }
+        }
+      }
+    },
+    "Evolve now" : {
+      "shouldTranslate" : false
+    },
+    "FEED IT" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DALE COMIDA"
+          }
+        }
+      }
+    },
+    "FINAL FORM" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FORMA FINAL"
+          }
+        }
+      }
+    },
+    "FLUSH THE POOP" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LIMPIA LA CACA"
+          }
+        }
+      }
+    },
+    "FLUSH!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡LIMPIA!"
+          }
+        }
+      }
+    },
+    "FOOD" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "COMIDA"
+          }
+        }
+      }
+    },
+    "FOOD+%lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "COMIDA+%lld"
+          }
+        }
+      }
+    },
+    "FRIEND" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AMIGO"
+          }
+        }
+      }
+    },
+    "FRIEND'S CODE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CÓDIGO AMIGO"
+          }
+        }
+      }
+    },
+    "FRIEND: %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AMIGO: %@"
+          }
+        }
+      }
+    },
+    "FULL!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡LLENO!"
+          }
+        }
+      }
+    },
+    "Food" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comida"
+          }
+        }
+      }
+    },
+    "GIVE MEDICINE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DALE MEDICINA"
+          }
+        }
+      }
+    },
+    "GOOD MORNING" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BUENOS DÍAS"
+          }
+        }
+      }
+    },
+    "GOOD NIGHT" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BUENAS NOCHES"
+          }
+        }
+      }
+    },
+    "GREAT!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡GENIAL!"
+          }
+        }
+      }
+    },
+    "H5N-9QP" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "H5N-9QP"
+          }
+        }
+      }
+    },
+    "HATCH" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NACER"
+          }
+        }
+      }
+    },
+    "HATCHED!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡NACIÓ!"
+          }
+        }
+      }
+    },
+    "HATCHLING" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CRÍA"
+          }
+        }
+      }
+    },
+    "HEALTHY!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡SANO!"
+          }
+        }
+      }
+    },
+    "HIT!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡GOLPE!"
+          }
+        }
+      }
+    },
+    "HOW TO PLAY" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CÓMO JUGAR"
+          }
+        }
+      }
+    },
+    "HUNGER" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HAMBRE"
+          }
+        }
+      }
+    },
+    "HUNGRY" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HAMBRE"
+          }
+        }
+      }
+    },
+    "HUNGRY!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡HAMBRE!"
+          }
+        }
+      }
+    },
+    "Hungry" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hambre"
+          }
+        }
+      }
+    },
+    "INJURED!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡HERIDO!"
+          }
+        }
+      }
+    },
+    "INJURIES" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HERIDAS"
+          }
+        }
+      }
+    },
+    "INJURIES %lld/%lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HERIDAS %lld/%lld"
+          }
+        }
+      }
+    },
+    "LAST CODE %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ÚLTIMO CÓDIGO %@"
+          }
+        }
+      }
+    },
+    "LINKING..." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CONECTANDO..."
+          }
+        }
+      }
+    },
+    "LONELY" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SOLEDAD"
+          }
+        }
+      }
+    },
+    "Lay rare egg" : {
+      "shouldTranslate" : false
+    },
+    "Lay spiky egg" : {
+      "shouldTranslate" : false
+    },
+    "Lifetime steps" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasos en total"
+          }
+        }
+      }
+    },
+    "MEAT" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CARNE"
+          }
+        }
+      }
+    },
+    "MISS!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡FALLÓ!"
+          }
+        }
+      }
+    },
+    "MISTAKES %lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ERRORES %lld"
+          }
+        }
+      }
+    },
+    "Make sick" : {
+      "shouldTranslate" : false
+    },
+    "NEW CODE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CÓDIGO NUEVO"
+          }
+        }
+      }
+    },
+    "NEW EGG" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HUEVO NUEVO"
+          }
+        }
+      }
+    },
+    "NEW EGG IN %lldd" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HUEVO NUEVO EN %lldd"
+          }
+        }
+      }
+    },
+    "NO RESERVES" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SIN RESERVAS"
+          }
+        }
+      }
+    },
+    "NO STEP SENSOR" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SIN SENSOR DE PASOS"
+          }
+        }
+      }
+    },
+    "NOTIFICATIONS" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NOTIFICACIONES"
+          }
+        }
+      }
+    },
+    "New egg" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huevo nuevo"
+          }
+        }
+      }
+    },
+    "New egg in" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Huevo nuevo en"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BIEN"
+          }
+        }
+      }
+    },
+    "OPEN THE GAME" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ABRE EL JUEGO"
+          }
+        }
+      }
+    },
+    "PROTEIN" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PROTEÍNA"
+          }
+        }
+      }
+    },
+    "PROTEIN OR TRAIN" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PROTEÍNA O ENTRENA"
+          }
+        }
+      }
+    },
+    "PROTEIN+%lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PROTEÍNA+%lld"
+          }
+        }
+      }
+    },
+    "Poop" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caca"
+          }
+        }
+      }
+    },
+    "Protein" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proteína"
+          }
+        }
+      }
+    },
+    "RARE EGG" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HUEVO RARO"
+          }
+        }
+      }
+    },
+    "RARE EGG!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡HUEVO RARO!"
+          }
+        }
+      }
+    },
+    "RESERVE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RESERVA"
+          }
+        }
+      }
+    },
+    "RESERVE %lld/%lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RESERVA %lld/%lld"
+          }
+        }
+      }
+    },
+    "RESERVE +%lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RESERVA +%lld"
+          }
+        }
+      }
+    },
+    "RESERVE+%lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RESERVA+%lld"
+          }
+        }
+      }
+    },
+    "RIP" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QEPD"
+          }
+        }
+      }
+    },
+    "RIVAL ATTACKS!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡ATACA EL RIVAL!"
+          }
+        }
+      }
+    },
+    "RIVAL: %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RIVAL: %@"
+          }
+        }
+      }
+    },
+    "ROOKIE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "NOVATO"
+          }
+        }
+      }
+    },
+    "Reserves saved" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reservas guardadas"
+          }
+        }
+      }
+    },
+    "SICK!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡ENFERMO!"
+          }
+        }
+      }
+    },
+    "SICK! MEDS" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡ENFERMO! MEDICINA"
+          }
+        }
+      }
+    },
+    "SICKNESS" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ENFERMEDAD"
+          }
+        }
+      }
+    },
+    "SLEEPING" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DURMIENDO"
+          }
+        }
+      }
+    },
+    "SPIKY EGG" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HUEVO CON PÚAS"
+          }
+        }
+      }
+    },
+    "SPIKY EGG!!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡¡HUEVO CON PÚAS!!"
+          }
+        }
+      }
+    },
+    "STEPS %lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PASOS %lld"
+          }
+        }
+      }
+    },
+    "STRENGTH" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FUERZA"
+          }
+        }
+      }
+    },
+    "SWIPE → SETTINGS" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DESLIZA → AJUSTES"
+          }
+        }
+      }
+    },
+    "Shows what your dino needs most, or your dino when all is well." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muestra lo que más necesita tu dino, o a tu dino cuando todo está bien."
+          }
+        }
+      }
+    },
+    "Sick" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enfermo"
+          }
+        }
+      }
+    },
+    "Skip 1 hour" : {
+      "shouldTranslate" : false
+    },
+    "Start new egg" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezar huevo nuevo"
+          }
+        }
+      }
+    },
+    "Start over with a new egg?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Empezar de nuevo con otro huevo?"
+          }
+        }
+      }
+    },
+    "TAP" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TOCA"
+          }
+        }
+      }
+    },
+    "TAP FAST!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡TOCA RÁPIDO!"
+          }
+        }
+      }
+    },
+    "TAP OR WALK" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TOCA O CAMINA"
+          }
+        }
+      }
+    },
+    "TAP OR WALK TO HATCH" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TOCA O CAMINA PARA NACER"
+          }
+        }
+      }
+    },
+    "TAP THE EGG" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TOCA EL HUEVO"
+          }
+        }
+      }
+    },
+    "TAP TO ENTER" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TOCA PARA ESCRIBIR"
+          }
+        }
+      }
+    },
+    "TAP ▶ %lld/6" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TOCA ▶ %lld/6"
+          }
+        }
+      }
+    },
+    "TESTING" : {
+      "shouldTranslate" : false
+    },
+    "THAT'S YOU!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡ESE ERES TÚ!"
+          }
+        }
+      }
+    },
+    "THIS STAGE  W%lld L%lld  %lld%%" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ESTA ETAPA  G%lld P%lld  %lld%%"
+          }
+        }
+      }
+    },
+    "TO HATCH: %lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PARA NACER: %lld"
+          }
+        }
+      }
+    },
+    "TOO WEAK" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MUY DÉBIL"
+          }
+        }
+      }
+    },
+    "TOO YOUNG" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MUY JOVEN"
+          }
+        }
+      }
+    },
+    "TRAIN" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ENTRENO"
+          }
+        }
+      }
+    },
+    "TRAIN+%lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ENTRENO+%lld"
+          }
+        }
+      }
+    },
+    "TRAINED %lldx" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ENTRENÓ %lldx"
+          }
+        }
+      }
+    },
+    "TRAINED! %lld LEFT" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡ENTRENÓ! QUEDAN %lld"
+          }
+        }
+      }
+    },
+    "TURNED OFF" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APAGADO"
+          }
+        }
+      }
+    },
+    "Training" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrenamiento"
+          }
+        }
+      }
+    },
+    "Training reserve" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reserva de entreno"
+          }
+        }
+      }
+    },
+    "ULTIMATE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DEFINITIVO"
+          }
+        }
+      }
+    },
+    "USE TAP TRAINING" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ENTRENA TOCANDO"
+          }
+        }
+      }
+    },
+    "WALK" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CAMINA"
+          }
+        }
+      }
+    },
+    "WALK %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CAMINAR %@"
+          }
+        }
+      }
+    },
+    "WALKING" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CAMINAR"
+          }
+        }
+      }
+    },
+    "WATCHTAMER" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WATCHTAMER"
+          }
+        }
+      }
+    },
+    "WEAK!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡DÉBIL!"
+          }
+        }
+      }
+    },
+    "WEAK..." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DÉBIL..."
+          }
+        }
+      }
+    },
+    "WEIGHT %lldg" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PESO %lldg"
+          }
+        }
+      }
+    },
+    "WOKE UP!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡DESPERTÓ!"
+          }
+        }
+      }
+    },
+    "Walk trainings" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrenos caminando"
+          }
+        }
+      }
+    },
+    "Walking feeds and trains dino" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Caminar alimenta y entrena al dino"
+          }
+        }
+      }
+    },
+    "WatchTamer" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WatchTamer"
+          }
+        }
+      }
+    },
+    "YOU LOSE..." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PERDISTE..."
+          }
+        }
+      }
+    },
+    "YOU WIN!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡GANASTE!"
+          }
+        }
+      }
+    },
+    "YOUR CODE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TU CÓDIGO"
+          }
+        }
+      }
+    },
+    "You can start a new egg once every 2 weeks, or right away if your dino dies." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puedes empezar un huevo nuevo una vez cada 2 semanas, o enseguida si tu dino muere."
+          }
+        }
+      }
+    },
+    "ZZZ" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ZZZ"
+          }
+        }
+      }
+    },
+    "ZZZ... TAP 💡 TO WAKE" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ZZZ... TOCA 💡 PARA DESPERTAR"
+          }
+        }
+      }
+    },
+    "every %lld steps" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cada %lld pasos"
+          }
+        }
+      }
+    },
+    "every %lld steps a day, up to %lld" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cada %lld pasos al día, hasta %lld"
+          }
+        }
+      }
+    },
+    "• MEAT = hunger. PROTEIN = strength.\n• Train by tapping fast or walking.\n• 5,000 steps a day = 1 training RESERVE (up to 4).\n• FLUSH poop. Skull = MEDICINE.\n• ! = your dino needs you.\n• Each battle uses 1 heart. Friends swap codes, then both tap BATTLE.\n• Rare eggs make stronger dinos.\n• Don't leave it alone for 2 weeks." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• CARNE = hambre. PROTEÍNA = fuerza.\n• Entrena tocando rápido o caminando.\n• 5,000 pasos al día = 1 RESERVA de entreno (hasta 4).\n• LIMPIA la caca. Calavera = MEDICINA.\n• ! = tu dino te necesita.\n• Cada batalla usa 1 corazón. Los amigos intercambian códigos y ambos tocan BATALLA.\n• Los huevos raros dan dinos más fuertes.\n• No lo dejes solo por 2 semanas."
+          }
+        }
+      }
+    },
+    "⚡ BATTLE!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚡ ¡BATALLA!"
+          }
+        }
+      }
+    },
+    "🍖 Your %@ is hungry! Feed it within 10 minutes." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🍖 ¡Tu %@ tiene hambre! Dale de comer en 10 minutos."
+          }
+        }
+      }
+    },
+    "💀 Your %@ is sick! Give it medicine." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💀 ¡Tu %@ está enfermo! Dale medicina."
+          }
+        }
+      }
+    },
+    "💩 %lld poops piling up. Flush them!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💩 Se acumulan %lld cacas. ¡Límpialas!"
+          }
+        }
+      }
+    },
+    "💩 %lld poops! Flush now or your %@ will get sick!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💩 ¡%lld cacas! Límpialas ya o tu %@ se enfermará."
+          }
+        }
+      }
+    },
+    "💩 Your %@ pooped! Time to flush." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💩 ¡Tu %@ hizo caca! Hora de limpiar."
+          }
+        }
+      }
+    },
+    "💪 Your %@ is weak! Give it protein or train it." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "💪 ¡Tu %@ está débil! Dale proteína o entrénalo."
+          }
+        }
+      }
+    },
+    "🥺 Your %@ is so lonely… Open WatchTamer today, or it will be gone forever!" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🥺 Tu %@ se siente muy solo… ¡Abre WatchTamer hoy o se irá para siempre!"
+          }
+        }
+      }
+    },
+    "🥺 Your %@ misses you! Open WatchTamer in the next 2 days, or it will be gone forever." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "🥺 ¡Tu %@ te extraña! Abre WatchTamer en los próximos 2 días o se irá para siempre."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

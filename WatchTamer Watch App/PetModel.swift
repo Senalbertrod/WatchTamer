@@ -28,12 +28,12 @@ enum DinoStage: String, Codable, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .egg: return "EGG"
-        case .baby1: return "BABY I"
-        case .baby2: return "BABY II"
-        case .rookie: return "ROOKIE"
-        case .champion: return "CHAMPION"
-        case .ultimate: return "ULTIMATE"
+        case .egg: return String(localized: "EGG")
+        case .baby1: return String(localized: "BABY I")
+        case .baby2: return String(localized: "BABY II")
+        case .rookie: return String(localized: "ROOKIE")
+        case .champion: return String(localized: "CHAMPION")
+        case .ultimate: return String(localized: "ULTIMATE")
         }
     }
 }
@@ -116,6 +116,9 @@ enum Tuning {
     static let walkFoodSteps = 250
     static let walkProteinSteps = 500
     static let walkTrainSteps = 1000
+    /// Every this many steps in one day saves a training reserve (up to `maxReserves`).
+    static let reserveSteps = 5000
+    static let maxReserves = 4
 
     /// How long each stage lasts before it evolves.
     static func stageDuration(_ s: DinoStage) -> Double {
@@ -325,12 +328,12 @@ struct Pet: Codable, Equatable {
         switch stage {
         case .egg:
             switch eggKind {
-            case .normal: return "EGG"
-            case .rare: return "RARE EGG"
-            case .spiky: return "SPIKY EGG"
+            case .normal: return String(localized: "EGG")
+            case .rare: return String(localized: "RARE EGG")
+            case .spiky: return String(localized: "SPIKY EGG")
             }
-        case .baby1: return "HATCHLING"
-        case .baby2: return "DINO KID"
+        case .baby1: return String(localized: "HATCHLING")
+        case .baby2: return String(localized: "DINO KID")
         default: return species.displayName
         }
     }
