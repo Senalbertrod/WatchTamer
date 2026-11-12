@@ -851,6 +851,14 @@ enum PixelArt {
         ".#####.",
         ".#.#.#.",
     ]
+    /// Evolution sparkle.
+    static let sparkle: [String] = [
+        "..#..",
+        ".#.#.",
+        "#...#",
+        ".#.#.",
+        "..#..",
+    ]
     static let zzz: [String] = [
         "#####",
         "...#.",

@@ -32,7 +32,7 @@ Builds run from Xcode include a **Testing** section in Settings (skip time, add 
 | ⚖️ **Status** | Tap through 6 pages: form & age, hunger hearts, strength hearts, effort, battle record (wins and losses), care |
 | 🍴 **Feed** | **Meat** = +1 hunger heart (+1g). **Protein** = +1 strength heart (+2g) |
 | 🏋️ **Train** | **TAP**: mash the screen for 5 seconds to fill the meter. **WALK**: just walk, even while the app is closed (see Walking below) |
-| ⚡ **Battle** | **CPU**: fight a computer rival. **FRIEND**: swap battle codes (see below). First to 3 hits wins. Rookie and up |
+| ⚡ **Battle** | **CPU**: fight a computer rival. Every CPU win in a row makes the next rival stronger (LEVEL 1 up to 11); a loss starts over at LEVEL 1. **FRIEND**: swap battle codes (see below). First to 3 hits wins. Rookie and up |
 | 🌊 **Flush** | Clean up poop. 8 piles = your dino gets sick |
 | 💡 **Lights** | Bedtime starts at 8–10pm (by stage), on your watch's local time, so it follows you when you travel. At bedtime the light switches off by itself, even with the game open, and your dino sleeps (its needs pause). **Light on** = it wakes up, so you can feed, train, battle, clean and heal any time of day or night. Leave the game during bedtime and the light switches off again. |
 | ➕ **Medicine** | Cure sickness and battle injuries (skull icon) |
@@ -54,9 +54,9 @@ Swipe left for **Settings**: notification switches, walking on or off, and a sho
 
 | Steps | Your dino gets |
 | --- | --- |
-| Every 250 | Food: +1 hunger heart (+1g) |
-| Every 500 | Protein: +1 strength heart (+2g) |
-| Every 1,000 | A training: +1 strength heart (−1g), counts toward evolution |
+| Every 1,000 | Food: +1 hunger heart (+1g) |
+| Every 2,000 | Protein: +1 strength heart (+2g) |
+| Every 3,000 | A training: +1 strength heart (−1g), counts toward evolution |
 | Every 5,000 in one day | A training **reserve**, saved for later (up to 4). Pick **RESERVE** on the Train menu to use one: it trains right away and counts toward evolution |
 
 Each one stops while its hearts are full, and starts again when a heart goes down. Pick WALK on the Train menu to see your steps toward each one.
@@ -134,6 +134,7 @@ WatchTamer has no accounts, ads, analytics or network code. Your dino, your sett
 | --- | --- |
 | 1.0 | First App Store release. |
 | 1.1 | • New watch face complication: shows what your dino needs most (medicine, food, a flush or protein), or your dino when all is well.<br>• Training reserves: every 5,000 steps in a day saves a training (up to 4). Use one from the Train menu any time.<br>• Smoother flush: the wave sweeps across and washes each poop away.<br>• Special vibrations for big moments: hatching, evolving, winning or losing a battle, getting sick.<br>• Now in Spanish (Español). |
+| 1.2 | • CPU battles get harder: every CPU win in a row makes the next rival stronger. See your streak on the Battles status page.<br>• New evolution scene: your old and new dino swap faster and faster, the screen flashes, then sparkles.<br>• Walking is a bigger challenge: food every 1,000 steps, protein every 2,000, training every 3,000. Feed your dino by hand the rest of the time. |
 
 ## Author
 

@@ -147,6 +147,19 @@ struct Tamer: Codable, Equatable {
     /// Last time the game was opened. Not opened for 14 days = the dino dies.
     var lastOpened: Date? = nil
 
+    // CPU win streak (added in 1.2; optional so older saves still load).
+    // Each CPU win in a row makes the next CPU rival stronger. Friend battles never use it.
+    var cpuStreakSaved: Int? = nil
+    var cpuBestStreakSaved: Int? = nil
+    var cpuStreak: Int {
+        get { cpuStreakSaved ?? 0 }
+        set { cpuStreakSaved = newValue }
+    }
+    var cpuBestStreak: Int {
+        get { cpuBestStreakSaved ?? 0 }
+        set { cpuBestStreakSaved = newValue }
+    }
+
     /// Old saves only: a dino paused in an older version resumes when this version starts.
     var pausedReason: PauseReason? = nil
 }
@@ -161,6 +174,9 @@ final class DinoState: ObservableObject {
     @Published var anim: HomeAnim = .none
     @Published var toast: String? = nil
     @Published var flashOn = false
+    /// Evolution scene: which step is showing, and the sprite the dino evolved from.
+    @Published var evolveStep = 0
+    @Published var evolveFromKey: String? = nil
 
     // Tap training
     @Published var trainMeter: Double = 0
@@ -262,6 +278,7 @@ final class DinoState: ObservableObject {
         let live = minutes <= 2
 
         var p = pet
+        let spriteBefore = p.spriteKey
         var events: [PetEvent] = []
         let cap = 20_000
         var t = p.lastUpdate
@@ -276,6 +293,7 @@ final class DinoState: ObservableObject {
             p.lastUpdate = p.lastUpdate.addingTimeInterval(Double(minutes) * secPerMin)
         }
         pet = p
+        if events.contains(.evolved) { evolveFromKey = spriteBefore }
         handle(events, live: live)
         if !events.isEmpty { save() }
     }
@@ -540,17 +558,35 @@ final class DinoState: ObservableObject {
 
     // MARK: - Evolution flash
 
+    /// Classic 90s evolution: the old and new dino swap faster and faster,
+    /// the screen flashes, then the new dino appears with sparkles.
+    /// Steps 0..<evolveSwapSteps swap, then evolveFlashSteps of flashing, then sparkles.
+    static let evolveSwapSteps = 12
+    static let evolveFlashSteps = 6
+
     private func playEvolution() {
         anim = .evolving
-        specialHaptic(.evolved)
+        evolveStep = 0
+        flashOn = false
+        haptic(.start)
         Task {
-            for _ in 0..<10 {
+            for step in 0..<DinoState.evolveSwapSteps {
+                evolveStep = step
+                // 320 ms at first, speeding up to 100 ms
+                try? await Task.sleep(for: .milliseconds(320 - step * 20))
+            }
+            specialHaptic(.evolved)
+            for step in 0..<DinoState.evolveFlashSteps {
+                evolveStep = DinoState.evolveSwapSteps + step
                 flashOn.toggle()
-                try? await Task.sleep(for: .milliseconds(160))
+                try? await Task.sleep(for: .milliseconds(120))
             }
             flashOn = false
-            anim = .none
+            evolveStep = DinoState.evolveSwapSteps + DinoState.evolveFlashSteps   // sparkles
             showToast(pet.formName + "!")
+            try? await Task.sleep(for: .seconds(1.6))
+            anim = .none
+            evolveFromKey = nil
         }
     }
 
@@ -655,8 +691,8 @@ final class DinoState: ObservableObject {
             return
         }
 
-        // Walking feeds and trains: food every 250 steps, protein every 500,
-        // a training every 1,000. Each stops while its hearts are full, and the
+        // Walking feeds and trains: food every 1,000 steps, protein every 2,000,
+        // a training every 3,000. Each stops while its hearts are full, and the
         // steps toward it wait (they don't pile up) until a heart goes down.
         tamer.foodBank += steps
         tamer.proteinBank += steps
@@ -855,7 +891,8 @@ final class DinoState: ObservableObject {
         battlePhase = .fighting
         haptic(.start)
         let mine = playerPower()
-        let theirs = Tuning.battlePower(rival.stage) + Double.random(in: 10...38)
+        // CPU only: every win in a row makes the next rival stronger (friend battles use `plan`).
+        let theirs = Tuning.battlePower(rival.stage) + Double.random(in: 10...38) + Tuning.cpuStreakPower(tamer.cpuStreak)
         // Legendary dinos (spiky egg) hit harder and defend better.
         // (rare-egg Ultimates get a smaller bonus; CPU rivals are always normal)
         let rivalBonus = Tuning.battleBonus(species: rival, rarePrize: false)
@@ -892,7 +929,15 @@ final class DinoState: ObservableObject {
             battleText += " " + String(localized: "INJURED!")
         }
         specialHaptic(won ? .won : .lost)
-        if plan != nil { tamer.myBattleCode = nil }   // fresh code for the next friend battle
+        if plan != nil {
+            tamer.myBattleCode = nil   // fresh code for the next friend battle
+        } else if won {
+            tamer.cpuStreak += 1
+            tamer.cpuBestStreak = max(tamer.cpuBestStreak, tamer.cpuStreak)
+            if tamer.cpuStreak >= 2 { showToast(String(localized: "\(tamer.cpuStreak) WINS IN A ROW!")) }
+        } else {
+            tamer.cpuStreak = 0
+        }
         save()
 
         try? await Task.sleep(for: .seconds(2.6))
@@ -987,7 +1032,9 @@ final class DinoState: ObservableObject {
             pet.battles = Tuning.ultimateBattles
             pet.wins = Tuning.ultimateBattles
         }
+        let spriteBefore = pet.spriteKey
         if pet.tryEvolve() {
+            evolveFromKey = spriteBefore
             handle([.evolved], live: true)
         } else {
             showToast(String(localized: "FINAL FORM"))

@@ -113,9 +113,9 @@ enum DinoSpecies: String, Codable, CaseIterable {
 enum Tuning {
     // Walking: every this many steps gives food, protein or a training.
     // Each one stops while its hearts are full (day or night).
-    static let walkFoodSteps = 250
-    static let walkProteinSteps = 500
-    static let walkTrainSteps = 1000
+    static let walkFoodSteps = 1000
+    static let walkProteinSteps = 2000
+    static let walkTrainSteps = 3000
     /// Every this many steps in one day saves a training reserve (up to `maxReserves`).
     static let reserveSteps = 5000
     static let maxReserves = 4
@@ -181,6 +181,12 @@ enum Tuning {
         case .ultimate: return 80
         default: return 15
         }
+    }
+
+    /// CPU battles only: extra rival power for each CPU win in a row (3 per win, up to 10 wins).
+    /// Friend battles never use this, so every version still gets the same friend results.
+    static func cpuStreakPower(_ streak: Int) -> Double {
+        Double(min(max(streak, 0), 10)) * 3
     }
 
     static let callTimeout: Double = 10        // ignore a call this long -> care mistake

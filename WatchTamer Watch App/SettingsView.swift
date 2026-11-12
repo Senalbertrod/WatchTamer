@@ -60,6 +60,7 @@ struct SettingsView: View {
                     • FLUSH poop. Skull = MEDICINE.
                     • ! = your dino needs you.
                     • Each battle uses 1 heart. Friends swap codes, then both tap BATTLE.
+                    • Each CPU win in a row makes the next rival stronger.
                     • Rare eggs make stronger dinos.
                     • Don't leave it alone for 2 weeks.
                     """)
@@ -70,7 +71,7 @@ struct SettingsView: View {
             // Only in builds run from Xcode. App Store / TestFlight (Release) builds hide this.
             Section("TESTING") {
                 Button("Skip 1 hour") { state.debugSkip(minutes: 60) }
-                Button("Add 250 steps") { state.creditSteps(250) }
+                Button("Add 1,000 steps") { state.creditSteps(1000) }
                 Button("Add 5,000 steps") { state.creditSteps(5000) }
                 Button("Evolve now") { state.debugEvolve() }
                 Button("Make sick") { state.debugSick() }

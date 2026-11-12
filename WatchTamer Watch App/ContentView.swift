@@ -210,7 +210,7 @@ struct ContentView: View {
 
     private func homeScene(dot: CGFloat, size: CGSize) -> some View {
         let groundY = size.height - 2 * dot
-        let rows = DinoSprite.rows(pet.spriteKey, frame: currentFrame)
+        let rows = DinoSprite.rows(evolveSpriteKey ?? pet.spriteKey, frame: currentFrame)
         let spriteW = CGFloat(rows.first?.count ?? 0) * dot
         let spriteH = CGFloat(rows.count) * dot
         let poopAreaDots: CGFloat = pet.poops > 0 ? 13 : 0
@@ -252,6 +252,17 @@ struct ContentView: View {
                 if state.anim == .healing {
                     PixelSprite(rows: PixelArt.heart, dot: dot, color: pal.dot)
                         .position(x: dinoX, y: max(4 * dot, dinoY - spriteH / 2 - 5 * dot))
+                }
+
+                if showEvolveSparkles {
+                    ForEach(0..<4, id: \.self) { i in
+                        let dx: CGFloat = i % 2 == 0 ? -1 : 1
+                        let dy: CGFloat = i < 2 ? -1 : 0.2
+                        PixelSprite(rows: PixelArt.sparkle, dot: dot, color: pal.dot)
+                            .opacity(frame == i % 2 ? 1 : 0.3)
+                            .position(x: dinoX + dx * (spriteW / 2 + 3 * dot),
+                                      y: max(3 * dot, dinoY + dy * (spriteH / 2 + 2 * dot)))
+                    }
                 }
 
                 if state.anim == .walkRep {
@@ -317,7 +328,19 @@ struct ContentView: View {
 
     private var isEatingOrStill: Bool {
         if case .eating = state.anim { return true }
-        return state.anim == .refusing || state.anim == .healing || state.isAsleep
+        return state.anim == .refusing || state.anim == .healing || state.anim == .evolving || state.isAsleep
+    }
+
+    /// During the evolution swap, every other step shows the old dino.
+    private var evolveSpriteKey: String? {
+        guard state.anim == .evolving, let old = state.evolveFromKey,
+              state.evolveStep < DinoState.evolveSwapSteps, state.evolveStep % 2 == 0 else { return nil }
+        return old
+    }
+
+    /// Sparkles around the new dino once the evolution flash is over.
+    private var showEvolveSparkles: Bool {
+        state.anim == .evolving && state.evolveStep >= DinoState.evolveSwapSteps + DinoState.evolveFlashSteps
     }
 
     private var spriteFacesRight: Bool {
@@ -385,6 +408,7 @@ struct ContentView: View {
                 lcdText(String(localized: "BATTLES"), 11)
                 lcdText(String(localized: "THIS STAGE  W\(pet.wins) L\(pet.battles - pet.wins)  \(Int(pet.winRate * 100))%"), 9)
                 lcdText(String(localized: "ALL TIME  W\(pet.totalWins) L\(pet.totalBattles - pet.totalWins)"), 9)
+                lcdText(String(localized: "CPU STREAK \(state.tamer.cpuStreak)  BEST \(state.tamer.cpuBestStreak)"), 9)
             default:
                 lcdText(String(localized: "CARE"), 11)
                 lcdText(String(localized: "MISTAKES \(pet.careMistakes)"), 9)
@@ -649,6 +673,10 @@ struct ContentView: View {
                     }
                     lcdText(state.isFriendBattle ? String(localized: "FRIEND: \(state.enemySpecies.displayName)")
                                                 : String(localized: "RIVAL: \(state.enemySpecies.displayName)"), 8)
+                    if !state.isFriendBattle {
+                        // Each CPU win in a row makes the next rival stronger (up to level 11).
+                        lcdText(String(localized: "LEVEL \(min(state.tamer.cpuStreak, 10) + 1)"), 8)
+                    }
                 }
             case .fighting, .result:
                 HStack {
